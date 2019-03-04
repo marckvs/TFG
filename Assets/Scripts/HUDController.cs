@@ -4,16 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameloopController : MonoBehaviour {
+[DisallowMultipleComponent]
+public class HUDController : Singleton<HUDController> {
 
     public GameObject MainMenuScreen;
     public GameObject LevelMenuScreen;
     public GameObject InGameMenu;
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
 
     public void OnQuitButtonPressed()
     {
@@ -33,10 +29,16 @@ public class GameloopController : MonoBehaviour {
         SceneManager.LoadScene(buildIndex);
     }
 
-    public void OnBackButtonPressed(int buildIndex)
+    public void OnLevelBackButtonPressed(int buildIndex)
     {
         InGameMenu.SetActive(false);
         LevelMenuScreen.SetActive(true);
         SceneManager.LoadScene(buildIndex);
+    }
+
+    public void OnMenuBackButtonPressed()
+    {
+        MainMenuScreen.SetActive(true);
+        LevelMenuScreen.SetActive(false);
     }
 }
