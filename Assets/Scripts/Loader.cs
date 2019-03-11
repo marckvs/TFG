@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(GameManager), typeof(SceneLoader), typeof(HUDController))]
+[RequireComponent(typeof(GameManager), typeof(SceneLoader), typeof(UIController))]
 [DisallowMultipleComponent]
 public class Loader : Singleton<Loader>
 {

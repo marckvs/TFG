@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [DisallowMultipleComponent]
-public class HUDController : Singleton<HUDController> {
+public class UIController : Singleton<UIController> {
 
     public GameObject MainMenuScreen;
     public GameObject LevelMenuScreen;

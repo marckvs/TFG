@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class GameManager : Singleton<GameManager>
-{
-    public LevelManager currentLevel;
+public class LevelManager : MonoBehaviour {
+    public List<Cell> cells;
+    public int LevelId;
+	
 }
