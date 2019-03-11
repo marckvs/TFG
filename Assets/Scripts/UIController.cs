@@ -11,6 +11,8 @@ public class UIController : Singleton<UIController> {
     public GameObject LevelMenuScreen;
     public GameObject InGameMenu;
 
+    public PlayerController playerController;
+
     public void OnQuitButtonPressed()
     {
         Application.Quit();
@@ -40,5 +42,11 @@ public class UIController : Singleton<UIController> {
     {
         MainMenuScreen.SetActive(true);
         LevelMenuScreen.SetActive(false);
+    }
+
+    public void onMovePressed()
+    {
+        playerController = FindObjectOfType<PlayerController>();
+        playerController.Move();
     }
 }

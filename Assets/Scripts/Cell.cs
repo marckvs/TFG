@@ -2,28 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Cell : MonoBehaviour{
 
 	public float cellPosX;
     public float cellPosY;
     public bool isCheckpoint;
 
-    public List<Transition> TransitionsFromCell;
+    public Transition transitionForward;
+    public Transition transitionDownwards;
+    public Transition transitionBackwards;
+    public Transition transitionUpwards;
 
-    public Transition transitionRight;
-    public Transition transitionLeft;
-    public Transition transitionUp;
-    public Transition transitionDown;
+    public Transition[] TransitionsFromCell;
 
-    void Start()
+    void Awake()
     {
         cellPosX = this.gameObject.transform.position.x;
         cellPosY = this.gameObject.transform.position.y;
 
-        TransitionsFromCell.Add(transitionRight);
-        TransitionsFromCell.Add(transitionDown);
-        TransitionsFromCell.Add(transitionLeft);
-        TransitionsFromCell.Add(transitionUp);
+        TransitionsFromCell = new Transition[4];
+
+        TransitionsFromCell[0] = transitionForward;
+        TransitionsFromCell[1] = transitionUpwards;
+        TransitionsFromCell[2] = transitionDownwards;
+        TransitionsFromCell[3] = transitionBackwards;
     }
 
 }
