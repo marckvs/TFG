@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum TRANSITION
 {
-    walk = 0, jump = 1, none = 2
+    walk = 2, jump = 1, none = 0
 }
 
 [System.Serializable]

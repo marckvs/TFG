@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour {
 
     public void Move()
     {
-        if (actualTransition.transition == TRANSITION.none) return;
+        if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed move");
         else
         {
             actualCell = actualTransition.cell;
@@ -32,12 +32,13 @@ public class PlayerController : MonoBehaviour {
 
     public void turnRight()
     {
-        if (idActualTransition < 3) idActualTransition++;
+        if (idActualTransition < actualCell.TransitionsFromCell.Length) idActualTransition++;
         else
         {
             idActualTransition = 0;
         }
         actualTransition = actualCell.TransitionsFromCell[idActualTransition];
+        if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed right");
     }
 
     public void turnLeft()
@@ -48,6 +49,7 @@ public class PlayerController : MonoBehaviour {
             idActualTransition = 3;
         }
         actualTransition = actualCell.TransitionsFromCell[idActualTransition];
+        if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed left");
     }
 
 }

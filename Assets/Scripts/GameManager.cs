@@ -6,4 +6,9 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     public LevelManager currentLevel;
+
+    public void RestartLevel(LevelManager levelManager)
+    {
+        currentLevel = levelManager;
+    }
 }

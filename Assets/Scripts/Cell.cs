@@ -11,9 +11,9 @@ public class Cell : MonoBehaviour{
 
     public Transition transitionForward;
     public Transition transitionDownwards;
-    public Transition transitionBackwards;
     public Transition transitionUpwards;
 
+    [HideInInspector]
     public Transition[] TransitionsFromCell;
 
     void Awake()
@@ -21,12 +21,11 @@ public class Cell : MonoBehaviour{
         cellPosX = this.gameObject.transform.position.x;
         cellPosY = this.gameObject.transform.position.y;
 
-        TransitionsFromCell = new Transition[4];
+        TransitionsFromCell = new Transition[3];
 
         TransitionsFromCell[0] = transitionForward;
         TransitionsFromCell[1] = transitionUpwards;
         TransitionsFromCell[2] = transitionDownwards;
-        TransitionsFromCell[3] = transitionBackwards;
     }
 
 }

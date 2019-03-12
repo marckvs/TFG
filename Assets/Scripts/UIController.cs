@@ -7,12 +7,38 @@ using UnityEngine.UI;
 [DisallowMultipleComponent]
 public class UIController : Singleton<UIController> {
 
+    LevelManager levelManager;
+
     public GameObject MainMenuScreen;
     public GameObject LevelMenuScreen;
     public GameObject InGameMenu;
 
+    public Image moveImage;
+    public Image turnLeftImage;
+    public Image turnRightImage;
+
+    public Image programSpot1;
+    public Image programSpot2;
+    public Image programSpot3;
+    public Image programSpot4;
+    public Image programSpot5;
+    public Image programSpot6;
+
+    [HideInInspector]
+    public Image[] programSpots;
+    [HideInInspector]
     public PlayerController playerController;
 
+    void Awake()
+    {
+        programSpots = new Image[6];
+        programSpots[0] = programSpot1;
+        programSpots[1] = programSpot2;
+        programSpots[2] = programSpot3;
+        programSpots[3] = programSpot4;
+        programSpots[4] = programSpot5;
+        programSpots[5] = programSpot6;
+    }
     public void OnQuitButtonPressed()
     {
         Application.Quit();
@@ -38,6 +64,13 @@ public class UIController : Singleton<UIController> {
         SceneManager.LoadScene(buildIndex);
     }
 
+    public void OnRunLevelButtonPressed()
+    {
+        checkReferenceLevelManager();
+
+        levelManager.runProgram();
+    }
+
     public void OnMenuBackButtonPressed()
     {
         MainMenuScreen.SetActive(true);
@@ -46,7 +79,56 @@ public class UIController : Singleton<UIController> {
 
     public void onMovePressed()
     {
-        playerController = FindObjectOfType<PlayerController>();
-        playerController.Move();
+        checkReferenceLevelManager();
+
+        if (levelManager.programSpotsUsed < programSpots.Length)
+        {
+            Color color = programSpots[levelManager.programSpotsUsed].color;
+            color.a = 1f;
+            programSpots[levelManager.programSpotsUsed].color = color;
+            programSpots[levelManager.programSpotsUsed].sprite = moveImage.sprite;
+            programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.move;
+            levelManager.programSpotsUsed++;
+        }
+    }
+
+    public void onTurnLeftPressed()
+    {
+        checkReferenceLevelManager();
+
+        if (levelManager.programSpotsUsed < programSpots.Length)
+        {
+            Color color = programSpots[levelManager.programSpotsUsed].color;
+            color.a = 1f;
+            programSpots[levelManager.programSpotsUsed].color = color;
+            programSpots[levelManager.programSpotsUsed].sprite = turnLeftImage.sprite;
+            programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.turnLeft;
+            levelManager.programSpotsUsed++;
+        }
+    }
+
+    public void onTurnRightPressed()
+    {
+        checkReferenceLevelManager();
+
+        if (levelManager.programSpotsUsed < programSpots.Length)
+        {
+            Color color = programSpots[levelManager.programSpotsUsed].color;
+            color.a = 1f;
+            programSpots[levelManager.programSpotsUsed].color = color;
+            programSpots[levelManager.programSpotsUsed].sprite = turnRightImage.sprite;
+            programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.turnRight;
+            levelManager.programSpotsUsed++;
+        }
+    }
+
+
+
+    private void checkReferenceLevelManager()
+    {
+        if(levelManager == null)
+        {
+            levelManager = FindObjectOfType<LevelManager>();
+        }
     }
 }

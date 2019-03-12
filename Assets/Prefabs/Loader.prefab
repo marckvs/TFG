@@ -610,9 +610,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114926608177959592, guid: 116e705e12a5a8746963d6b349d38482,
-          type: 2}
-        m_MethodName: turnLeft
+      - m_Target: {fileID: 114297658244975800}
+        m_MethodName: onTurnLeftPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -690,6 +689,7 @@ MonoBehaviour:
   MainMenuScreen: {fileID: 1845438052980422}
   LevelMenuScreen: {fileID: 1901627848036412}
   InGameMenu: {fileID: 1833581041326034}
+  playerController: {fileID: 0}
 --- !u!114 &114343465635753628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -972,9 +972,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114926608177959592, guid: 116e705e12a5a8746963d6b349d38482,
-          type: 2}
-        m_MethodName: turnRight
+      - m_Target: {fileID: 114297658244975800}
+        m_MethodName: onTurnRoghtPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1313,9 +1312,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114926608177959592, guid: 116e705e12a5a8746963d6b349d38482,
-          type: 2}
-        m_MethodName: Move
+      - m_Target: {fileID: 114297658244975800}
+        m_MethodName: onMovePressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

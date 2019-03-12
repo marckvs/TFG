@@ -341,7 +341,7 @@ Transform:
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 1490441074}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &647488999
 SpriteRenderer:
@@ -404,17 +404,14 @@ MonoBehaviour:
   cellPosY: 0
   isCheckpoint: 0
   transitionForward:
-    transition: 2
+    transition: 0
     cell: {fileID: 0}
   transitionDownwards:
-    transition: 2
-    cell: {fileID: 0}
-  transitionBackwards:
-    transition: 2
+    transition: 0
     cell: {fileID: 0}
   transitionUpwards:
     transition: 2
-    cell: {fileID: 0}
+    cell: {fileID: 2014674029}
   TransitionsFromCell: []
 --- !u!1 &690665593
 GameObject:
@@ -1147,7 +1144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1432438714
 Transform:
   m_ObjectHideFlags: 0
@@ -1227,9 +1224,6 @@ MonoBehaviour:
   transitionDownwards:
     transition: 0
     cell: {fileID: 0}
-  transitionBackwards:
-    transition: 0
-    cell: {fileID: 0}
   transitionUpwards:
     transition: 0
     cell: {fileID: 0}
@@ -1259,8 +1253,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 647488998}
   - {fileID: 1816633287}
+  - {fileID: 647488998}
   - {fileID: 2014674027}
   - {fileID: 1432438714}
   m_Father: {fileID: 0}
@@ -1294,7 +1288,7 @@ Transform:
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 1490441074}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1816633288
 SpriteRenderer:
@@ -1357,18 +1351,58 @@ MonoBehaviour:
   cellPosY: 0
   isCheckpoint: 0
   transitionForward:
-    transition: 0
+    transition: 2
     cell: {fileID: 647489000}
   transitionDownwards:
-    transition: 2
-    cell: {fileID: 0}
-  transitionBackwards:
-    transition: 2
+    transition: 0
     cell: {fileID: 0}
   transitionUpwards:
-    transition: 2
+    transition: 0
     cell: {fileID: 0}
   TransitionsFromCell: []
+--- !u!1 &1955925305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1955925307}
+  - component: {fileID: 1955925306}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1955925306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1955925305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fe57eb72134f0546b746a033e1e7af1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cells: []
+  LevelId: 0
+  programSpotsUsed: 0
+--- !u!4 &1955925307
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1955925305}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 104.63522, y: 119.41864, z: -169.46638}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2014674026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1385,7 +1419,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2014674027
 Transform:
   m_ObjectHideFlags: 0
@@ -1460,12 +1494,9 @@ MonoBehaviour:
   cellPosY: 0
   isCheckpoint: 0
   transitionForward:
-    transition: 0
-    cell: {fileID: 0}
+    transition: 2
+    cell: {fileID: 1432438716}
   transitionDownwards:
-    transition: 0
-    cell: {fileID: 0}
-  transitionBackwards:
     transition: 0
     cell: {fileID: 0}
   transitionUpwards:
