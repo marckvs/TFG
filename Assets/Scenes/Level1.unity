@@ -762,16 +762,6 @@ Prefab:
       propertyPath: actualCell
       value: 
       objectReference: {fileID: 1816633289}
-    - target: {fileID: 212643314918559182, guid: 116e705e12a5a8746963d6b349d38482,
-        type: 2}
-      propertyPath: m_SortingLayerID
-      value: -105620363
-      objectReference: {fileID: 0}
-    - target: {fileID: 212643314918559182, guid: 116e705e12a5a8746963d6b349d38482,
-        type: 2}
-      propertyPath: m_SortingLayer
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 116e705e12a5a8746963d6b349d38482, type: 2}
   m_IsPrefabAsset: 0
@@ -1361,48 +1351,85 @@ MonoBehaviour:
     transition: 0
     cell: {fileID: 0}
   TransitionsFromCell: []
---- !u!1 &1955925305
+--- !u!1001 &1898534945
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4891132368682862, guid: e6219ed2f8f6d904698e1aec84ebfc69, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 104.63522
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891132368682862, guid: e6219ed2f8f6d904698e1aec84ebfc69, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 119.41864
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891132368682862, guid: e6219ed2f8f6d904698e1aec84ebfc69, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -169.46638
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891132368682862, guid: e6219ed2f8f6d904698e1aec84ebfc69, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891132368682862, guid: e6219ed2f8f6d904698e1aec84ebfc69, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891132368682862, guid: e6219ed2f8f6d904698e1aec84ebfc69, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891132368682862, guid: e6219ed2f8f6d904698e1aec84ebfc69, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891132368682862, guid: e6219ed2f8f6d904698e1aec84ebfc69, type: 2}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114946353590368764, guid: e6219ed2f8f6d904698e1aec84ebfc69,
+        type: 2}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 1961340515}
+    - target: {fileID: 114946353590368764, guid: e6219ed2f8f6d904698e1aec84ebfc69,
+        type: 2}
+      propertyPath: initialCell
+      value: 
+      objectReference: {fileID: 1816633289}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e6219ed2f8f6d904698e1aec84ebfc69, type: 2}
+  m_IsPrefabAsset: 0
+--- !u!1 &1961340514
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1955925307}
-  - component: {fileID: 1955925306}
+  - component: {fileID: 1961340515}
   m_Layer: 0
-  m_Name: LevelManager
+  m_Name: PlayerSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1955925306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1955925305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fe57eb72134f0546b746a033e1e7af1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cells: []
-  LevelId: 0
-  programSpotsUsed: 0
---- !u!4 &1955925307
+--- !u!4 &1961340515
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1955925305}
+  m_GameObject: {fileID: 1961340514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 104.63522, y: 119.41864, z: -169.46638}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2014674026
 GameObject:
@@ -1549,14 +1576,14 @@ MonoBehaviour:
   cellPosY: 0
   isCheckpoint: 0
   transitionForward:
-    transition: 2
-    cell: {fileID: 647489000}
+    transition: 0
+    cell: {fileID: 0}
   transitionDownwards:
     transition: 0
     cell: {fileID: 0}
   transitionUpwards:
-    transition: 0
-    cell: {fileID: 0}
+    transition: 2
+    cell: {fileID: 1432438716}
   TransitionsFromCell: []
 --- !u!212 &2094377222
 SpriteRenderer:

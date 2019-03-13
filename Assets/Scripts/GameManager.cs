@@ -15,12 +15,17 @@ public class GameManager : Singleton<GameManager>
         currentLevel = levelManager;
         levelCompleted = false;
         runningProgram = false;
+        currentLevel.programSpotsUsed = 0;
+
+        UIController.I.RestartUI();
 
         InitCoroutines();
+        currentLevel.SpawnPlayer();
     }
 
-    private IEnumerator CheckNotRunningProgram()
+    public IEnumerator CheckNotRunningProgram()
     {
+        runningProgram = false;
         while (!runningProgram)
         {
             yield return null;
@@ -28,7 +33,7 @@ public class GameManager : Singleton<GameManager>
         currentLevel.StartCoroutine(currentLevel.RunProgram());
     }
 
-    private IEnumerator CheckLevelCompleted()
+    public IEnumerator CheckLevelCompleted()
     {
         while (!levelCompleted)
         {

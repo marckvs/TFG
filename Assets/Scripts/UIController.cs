@@ -73,12 +73,19 @@ public class UIController : Singleton<UIController> {
         GameManager.I.runningProgram = true;
     }
 
+    public void OnRestartButtonPressed()
+    {
+        checkReferenceLevelManager();
+
+        GameManager.I.RestartLevel(levelManager);
+    }
+
     public void OnClickButtonMainProgramm()
     {
         if (levelManager.programSpotsUsed > 0)
         {
             levelManager.programSpotsUsed--;
-            changeAlpha(0);
+            changeAlpha(0, levelManager.programSpotsUsed);
         }
     }
 
@@ -94,7 +101,7 @@ public class UIController : Singleton<UIController> {
 
         if (levelManager.programSpotsUsed < programSpots.Length)
         {
-            changeAlpha(1);
+            changeAlpha(1, levelManager.programSpotsUsed);
             programSpots[levelManager.programSpotsUsed].sprite = moveImage.sprite;
             programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.move;
             levelManager.programSpotsUsed++;
@@ -107,7 +114,7 @@ public class UIController : Singleton<UIController> {
 
         if (levelManager.programSpotsUsed < programSpots.Length)
         {
-            changeAlpha(1);
+            changeAlpha(1, levelManager.programSpotsUsed);
             programSpots[levelManager.programSpotsUsed].sprite = turnLeftImage.sprite;
             programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.turnLeft;
             levelManager.programSpotsUsed++;
@@ -120,7 +127,7 @@ public class UIController : Singleton<UIController> {
 
         if (levelManager.programSpotsUsed < programSpots.Length)
         {
-            changeAlpha(1);
+            changeAlpha(1, levelManager.programSpotsUsed);
             programSpots[levelManager.programSpotsUsed].sprite = turnRightImage.sprite;
             programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.turnRight;
             levelManager.programSpotsUsed++;
@@ -132,11 +139,19 @@ public class UIController : Singleton<UIController> {
 
     }
 
-    private void changeAlpha(int alpha)
+    public void RestartUI()
     {
-        Color color = programSpots[levelManager.programSpotsUsed].color;
+        for (int i = 0; i < programSpots.Length; i++)
+        {
+            changeAlpha(0, i);
+        }
+    }
+
+    private void changeAlpha(int alpha, int position)
+    {
+        Color color = programSpots[position].color;
         color.a = alpha;
-        programSpots[levelManager.programSpotsUsed].color = color;
+        programSpots[position].color = color;
     }
 
     private void checkReferenceLevelManager()

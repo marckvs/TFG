@@ -5,18 +5,14 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerController : MonoBehaviour {
     [HideInInspector]
-    public Transform trans;
+    public Transform tr;
     public Cell actualCell;
     public Transition actualTransition;
     public int idActualTransition;
 
     void Start()
     {
-        trans = gameObject.GetComponent<Transform>();
-        idActualTransition = 0;
-        Debug.Log(idActualTransition);
-        Debug.Log(actualCell.TransitionsFromCell.Length);
-        actualTransition = actualCell.TransitionsFromCell[idActualTransition];
+        tr = gameObject.GetComponent<Transform>();
     }
 
     public void Move()
@@ -26,7 +22,7 @@ public class PlayerController : MonoBehaviour {
         {
             actualCell = actualTransition.cell;
             actualTransition = actualCell.transitionForward;
-            trans.position = new Vector3(actualCell.cellPosX, actualCell.cellPosY, 0f);
+            tr.position = new Vector3(actualCell.cellPosX, actualCell.cellPosY, 0f);
         }
     }
 
@@ -46,10 +42,16 @@ public class PlayerController : MonoBehaviour {
         if (idActualTransition > 0) idActualTransition--;
         else
         {
-            idActualTransition = 3;
+            idActualTransition = actualCell.TransitionsFromCell.Length - 1;
         }
         actualTransition = actualCell.TransitionsFromCell[idActualTransition];
         if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed left");
+    }
+
+    public void SetPlayerInitialTransition()
+    {
+        idActualTransition = 0;
+        actualTransition = actualCell.TransitionsFromCell[idActualTransition];
     }
 
 }

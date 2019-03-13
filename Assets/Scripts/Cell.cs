@@ -16,7 +16,7 @@ public class Cell : MonoBehaviour{
     [HideInInspector]
     public Transition[] TransitionsFromCell;
 
-    void Awake()
+    public void SetCell()
     {
         cellPosX = this.gameObject.transform.position.x;
         cellPosY = this.gameObject.transform.position.y;
