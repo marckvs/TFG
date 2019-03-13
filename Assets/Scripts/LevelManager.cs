@@ -21,14 +21,22 @@ public class LevelManager : MonoBehaviour {
         playerController = FindObjectOfType<PlayerController>();
     }
 
-    public void runProgram()
+    public IEnumerator RunProgram()
     {
         programCommands = UIController.I.programSpots;
         for (int i = 0; i < programCommands.Length; i++)
         {
             Debug.Log(programCommands[i].color);
-            StartCoroutine(checkMovement(i));
+            commandToAction(programCommands[i].GetComponent<Command>().command);
+            yield return new WaitForSeconds(.5f);
         }
+
+        GameManager.I.runningProgram = false;
+    }
+
+    public void LevelCompleted()
+    {
+
     }
 
     private void commandToAction(COMMAND command)
@@ -52,10 +60,4 @@ public class LevelManager : MonoBehaviour {
 
         }
     }
-    IEnumerator checkMovement(int position)
-    {
-        yield return new WaitForSeconds(1f);
-        commandToAction(programCommands[position].GetComponent<Command>().command);
-    }
-
 }

@@ -29,6 +29,8 @@ public class UIController : Singleton<UIController> {
     [HideInInspector]
     public PlayerController playerController;
 
+    //TODO FIX CAPITAL LETTERS
+
     void Awake()
     {
         programSpots = new Image[6];
@@ -68,7 +70,16 @@ public class UIController : Singleton<UIController> {
     {
         checkReferenceLevelManager();
 
-        levelManager.runProgram();
+        GameManager.I.runningProgram = true;
+    }
+
+    public void OnClickButtonMainProgramm()
+    {
+        if (levelManager.programSpotsUsed > 0)
+        {
+            levelManager.programSpotsUsed--;
+            changeAlpha(0);
+        }
     }
 
     public void OnMenuBackButtonPressed()
@@ -83,9 +94,7 @@ public class UIController : Singleton<UIController> {
 
         if (levelManager.programSpotsUsed < programSpots.Length)
         {
-            Color color = programSpots[levelManager.programSpotsUsed].color;
-            color.a = 1f;
-            programSpots[levelManager.programSpotsUsed].color = color;
+            changeAlpha(1);
             programSpots[levelManager.programSpotsUsed].sprite = moveImage.sprite;
             programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.move;
             levelManager.programSpotsUsed++;
@@ -98,9 +107,7 @@ public class UIController : Singleton<UIController> {
 
         if (levelManager.programSpotsUsed < programSpots.Length)
         {
-            Color color = programSpots[levelManager.programSpotsUsed].color;
-            color.a = 1f;
-            programSpots[levelManager.programSpotsUsed].color = color;
+            changeAlpha(1);
             programSpots[levelManager.programSpotsUsed].sprite = turnLeftImage.sprite;
             programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.turnLeft;
             levelManager.programSpotsUsed++;
@@ -113,16 +120,24 @@ public class UIController : Singleton<UIController> {
 
         if (levelManager.programSpotsUsed < programSpots.Length)
         {
-            Color color = programSpots[levelManager.programSpotsUsed].color;
-            color.a = 1f;
-            programSpots[levelManager.programSpotsUsed].color = color;
+            changeAlpha(1);
             programSpots[levelManager.programSpotsUsed].sprite = turnRightImage.sprite;
             programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.turnRight;
             levelManager.programSpotsUsed++;
         }
     }
 
+    public void OnCheckPointPressed()
+    {
 
+    }
+
+    private void changeAlpha(int alpha)
+    {
+        Color color = programSpots[levelManager.programSpotsUsed].color;
+        color.a = alpha;
+        programSpots[levelManager.programSpotsUsed].color = color;
+    }
 
     private void checkReferenceLevelManager()
     {
