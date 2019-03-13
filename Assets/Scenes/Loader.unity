@@ -2100,6 +2100,35 @@ Prefab:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114142719019649710, guid: c73695b056995184996fd1fd5f4ff584,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 543310812}
+    - target: {fileID: 114142719019649710, guid: c73695b056995184996fd1fd5f4ff584,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnLevelBackButtonPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 114516160379228318, guid: c73695b056995184996fd1fd5f4ff584,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 543310812}
+    - target: {fileID: 114516160379228318, guid: c73695b056995184996fd1fd5f4ff584,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnMenuBackButtonPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 114668485737993962, guid: c73695b056995184996fd1fd5f4ff584,
+        type: 2}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1901627848036412, guid: c73695b056995184996fd1fd5f4ff584, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c73695b056995184996fd1fd5f4ff584, type: 2}
   m_IsPrefabAsset: 0
