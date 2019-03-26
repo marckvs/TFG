@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour {
 
     public void SetPlayerInitialTransition()
     {
-        idActualTransition = 0;
+        idActualTransition = (int) TRANSITIONDIRECTION.forward;
         actualTransition = actualCell.TransitionsFromCell[idActualTransition];
     }
 

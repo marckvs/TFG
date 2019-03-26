@@ -19,6 +19,8 @@ public class GameManager : Singleton<GameManager>
 
         UIController.I.RestartUI();
 
+        currentLevel.StopAllCoroutines();
+        StopAllCoroutines();
         InitCoroutines();
         currentLevel.SpawnPlayer();
     }

@@ -144,6 +144,7 @@ public class UIController : Singleton<UIController> {
         for (int i = 0; i < programSpots.Length; i++)
         {
             changeAlpha(0, i);
+            programSpots[i].GetComponent<Command>().command = COMMAND.none;
         }
     }
 

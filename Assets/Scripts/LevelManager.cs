@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour {
 
     public Cell[] cells;
     public int LevelId;
+
     public Cell initialCell;
 
     public int programSpotsUsed;
@@ -20,7 +21,7 @@ public class LevelManager : MonoBehaviour {
         programSpotsUsed = 0;
         playerController = FindObjectOfType<PlayerController>();
         cells = FindObjectsOfType<Cell>();
-        SetInitialCells();
+        SetCells();
         GameManager.I.RestartLevel(this);
     }
 
@@ -28,16 +29,20 @@ public class LevelManager : MonoBehaviour {
     {
         programCommands = UIController.I.programSpots;
         Debug.Log(programCommands.Length);
-        for (int i = 0; i < programCommands.Length; i++)
+        if (programSpotsUsed > 0)
         {
-            Debug.Log(programCommands[i].color);
-            commandToAction(programCommands[i].GetComponent<Command>().command);
-            yield return new WaitForSeconds(.5f);
+            for (int i = 0; i < programCommands.Length; i++)
+            {
+                commandToAction(programCommands[i].GetComponent<Command>().command);
+                yield return new WaitForSeconds(.5f);
+            }
+
+            Debug.Log("runProgram");
+            SpawnPlayer();
+            StopCoroutine(GameManager.I.CheckNotRunningProgram());
+            StartCoroutine(GameManager.I.CheckNotRunningProgram());
         }
 
-        SpawnPlayer();
-        StopCoroutine("CheckNotRunningProgram");
-        StartCoroutine(GameManager.I.CheckNotRunningProgram());
     }
 
     public void LevelCompleted()
@@ -54,7 +59,7 @@ public class LevelManager : MonoBehaviour {
 
     }
 
-    private void SetInitialCells()
+    private void SetCells()
     {
         for (int i = 0; i < cells.Length; i++)
         {
