@@ -22,7 +22,7 @@ public class GameManager : Singleton<GameManager>
         currentLevel.StopAllCoroutines();
         StopAllCoroutines();
         InitCoroutines();
-        currentLevel.SpawnPlayer();
+        currentLevel.RestartLevelManager();
     }
 
     public IEnumerator CheckNotRunningProgram()

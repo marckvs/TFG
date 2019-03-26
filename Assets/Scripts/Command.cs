@@ -10,4 +10,5 @@ public enum COMMAND
 public class Command : MonoBehaviour
 {
     public COMMAND command;
+    public int commandPosition;
 }

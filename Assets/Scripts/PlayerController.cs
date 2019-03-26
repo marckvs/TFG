@@ -5,6 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerController : MonoBehaviour {
     [HideInInspector]
+
+
     public Transform tr;
     public Cell actualCell;
     public Transition actualTransition;

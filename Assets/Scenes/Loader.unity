@@ -2200,6 +2200,16 @@ Prefab:
       propertyPath: m_FontData.m_Alignment
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114297658244975800, guid: c73695b056995184996fd1fd5f4ff584,
+        type: 2}
+      propertyPath: checkpointImage
+      value: 
+      objectReference: {fileID: 1459696598}
+    - target: {fileID: 114297658244975800, guid: c73695b056995184996fd1fd5f4ff584,
+        type: 2}
+      propertyPath: jumpImage
+      value: 
+      objectReference: {fileID: 132142123}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c73695b056995184996fd1fd5f4ff584, type: 2}
   m_IsPrefabAsset: 0
