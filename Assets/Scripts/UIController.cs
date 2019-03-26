@@ -104,75 +104,7 @@ public class UIController : Singleton<UIController> {
         GameManager.I.runningProgram = true;
     }
 
-    public void onMovePressed()
-    {
-        checkReferenceLevelManager();
-
-        if (levelManager.programSpotsUsed < programSpots.Length)
-        {
-            if (!isProgramButtonPressed || programButtonPressed == levelManager.programSpotsUsed - 1)
-            {
-
-                changeAlpha(1, levelManager.programSpotsUsed);
-                programSpots[levelManager.programSpotsUsed].sprite = moveImage.sprite;
-                programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.move;
-                levelManager.programSpotsUsed++;
-            }
-            else
-            {
-                levelManager.programSpotsUsed++;
-
-                for (int i = programButtonPressed + 1; i < levelManager.programSpotsUsed - 1; i++)
-                {
-                    changeAlpha(1, i + 1);
-                    programSpots[i + 1].sprite = programSpots[i].sprite;
-                    programSpots[i + 1].GetComponent<Command>().command = programSpots[i].GetComponent<Command>().command;
-                }
-
-                programSpots[programButtonPressed + 1].sprite = turnLeftImage.sprite;
-                programSpots[programButtonPressed + 1].GetComponent<Command>().command = COMMAND.move;
-
-                isProgramButtonPressed = false;
-                changeAlpha(1f, programButtonPressed);
-            }
-        }
-
-    }
-
-    public void onTurnLeftPressed()
-    {
-        checkReferenceLevelManager();
-
-        if (levelManager.programSpotsUsed < programSpots.Length )
-        {
-            if (!isProgramButtonPressed || programButtonPressed == levelManager.programSpotsUsed - 1)
-            {
-                changeAlpha(1, levelManager.programSpotsUsed);
-                programSpots[levelManager.programSpotsUsed].sprite = turnLeftImage.sprite;
-                programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.turnLeft;
-                levelManager.programSpotsUsed++;
-            }
-            else
-            {
-                levelManager.programSpotsUsed++;
-
-                for (int i = programButtonPressed+1; i < levelManager.programSpotsUsed-1; i++)
-                {
-                    changeAlpha(1, i + 1);
-                    programSpots[i + 1].sprite = programSpots[i].sprite;
-                    programSpots[i + 1].GetComponent<Command>().command = programSpots[i].GetComponent<Command>().command;
-                }
-
-                programSpots[programButtonPressed + 1].sprite = turnLeftImage.sprite;
-                programSpots[programButtonPressed + 1].GetComponent<Command>().command = COMMAND.turnLeft;
-
-                isProgramButtonPressed = false;
-                changeAlpha(1f, programButtonPressed);
-            }
-        }
-    }
-
-    public void onTurnRightPressed()
+    public void OnMovementButtonPressed(GameObject gO)
     {
         checkReferenceLevelManager();
 
@@ -181,43 +113,31 @@ public class UIController : Singleton<UIController> {
             if (!isProgramButtonPressed || programButtonPressed == levelManager.programSpotsUsed - 1)
             {
                 changeAlpha(1, levelManager.programSpotsUsed);
-                programSpots[levelManager.programSpotsUsed].sprite = turnRightImage.sprite;
-                programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.turnRight;
+                programSpots[levelManager.programSpotsUsed].sprite = gO.GetComponent<Image>().sprite;
+                programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = gO.GetComponent<Command>().command;
                 levelManager.programSpotsUsed++;
             }
             else
             {
-                levelManager.programSpotsUsed++;
-
-                for (int i = programButtonPressed + 1; i < levelManager.programSpotsUsed - 1; i++)
+                Debug.Log(programButtonPressed);
+                for (int i = levelManager.programSpotsUsed-1; i > programButtonPressed ; i--)
                 {
                     changeAlpha(1, i + 1);
                     programSpots[i + 1].sprite = programSpots[i].sprite;
                     programSpots[i + 1].GetComponent<Command>().command = programSpots[i].GetComponent<Command>().command;
                 }
 
-                programSpots[programButtonPressed + 1].sprite = turnRightImage.sprite;
-                programSpots[programButtonPressed + 1].GetComponent<Command>().command = COMMAND.turnRight;
+                programSpots[programButtonPressed + 1].sprite = gO.GetComponent<Image>().sprite;;
+                programSpots[programButtonPressed + 1].GetComponent<Command>().command = gO.GetComponent<Command>().command;
+                changeAlpha(1, programButtonPressed);
+
+                levelManager.programSpotsUsed++;
 
                 isProgramButtonPressed = false;
-                changeAlpha(1f, programButtonPressed);
             }
         }
     }
 
-
-    public void OnCheckPointPressed()
-    {
-        checkReferenceLevelManager();
-
-        if (levelManager.programSpotsUsed < programSpots.Length || programButtonPressed == levelManager.programSpotsUsed - 1)
-        {
-            changeAlpha(1, levelManager.programSpotsUsed);
-            programSpots[levelManager.programSpotsUsed].sprite = checkpointImage.sprite;
-            programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = COMMAND.checkPoint;
-            levelManager.programSpotsUsed++;
-        }
-    }
     #endregion
 
     #region MainProgram
@@ -229,8 +149,8 @@ public class UIController : Singleton<UIController> {
 
         if (command.command != COMMAND.none)
         {
-            Debug.Log(programButtonPressed);
-            Debug.Log(levelManager.programSpotsUsed);
+            //Debug.Log(programButtonPressed);
+            //Debug.Log(levelManager.programSpotsUsed);
             changeAlpha(0.6f, programButtonPressed);
             isProgramButtonPressed = true;
         }

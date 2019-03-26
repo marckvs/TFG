@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour {
             idActualTransition = actualCell.TransitionsFromCell.Length - 1;
         }
         actualTransition = actualCell.TransitionsFromCell[idActualTransition];
-        if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed left");
+        if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed right");
     }
 
     public void SetPlayerInitialTransition()
