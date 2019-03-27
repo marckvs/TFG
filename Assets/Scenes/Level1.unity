@@ -412,6 +412,9 @@ MonoBehaviour:
   transitionUpwards:
     transition: 2
     cell: {fileID: 2014674029}
+  transitionBackwards:
+    transition: 2
+    cell: {fileID: 1816633289}
   TransitionsFromCell: []
 --- !u!1 &690665593
 GameObject:
@@ -1129,7 +1132,7 @@ GameObject:
   - component: {fileID: 1432438715}
   - component: {fileID: 1432438716}
   m_Layer: 11
-  m_Name: checkpointCell
+  m_Name: checkpointCell1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1212,11 +1215,14 @@ MonoBehaviour:
     transition: 0
     cell: {fileID: 0}
   transitionDownwards:
-    transition: 0
-    cell: {fileID: 0}
+    transition: 2
+    cell: {fileID: 2094377221}
   transitionUpwards:
     transition: 0
     cell: {fileID: 0}
+  transitionBackwards:
+    transition: 2
+    cell: {fileID: 2014674029}
   TransitionsFromCell: []
 --- !u!1 &1490441073
 GameObject:
@@ -1350,6 +1356,9 @@ MonoBehaviour:
   transitionUpwards:
     transition: 0
     cell: {fileID: 0}
+  transitionBackwards:
+    transition: 0
+    cell: {fileID: 0}
   TransitionsFromCell: []
 --- !u!1001 &1898534945
 Prefab:
@@ -1442,7 +1451,7 @@ GameObject:
   - component: {fileID: 2014674028}
   - component: {fileID: 2014674029}
   m_Layer: 10
-  m_Name: normalCell
+  m_Name: normalCell1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1525,9 +1534,12 @@ MonoBehaviour:
     transition: 2
     cell: {fileID: 1432438716}
   transitionDownwards:
+    transition: 2
+    cell: {fileID: 647489000}
+  transitionUpwards:
     transition: 0
     cell: {fileID: 0}
-  transitionUpwards:
+  transitionBackwards:
     transition: 0
     cell: {fileID: 0}
   TransitionsFromCell: []
@@ -1542,7 +1554,7 @@ GameObject:
   - component: {fileID: 2094377222}
   - component: {fileID: 2094377221}
   m_Layer: 10
-  m_Name: normalCell
+  m_Name: normalCell2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1584,6 +1596,9 @@ MonoBehaviour:
   transitionUpwards:
     transition: 2
     cell: {fileID: 1432438716}
+  transitionBackwards:
+    transition: 2
+    cell: {fileID: 647489000}
   TransitionsFromCell: []
 --- !u!212 &2094377222
 SpriteRenderer:

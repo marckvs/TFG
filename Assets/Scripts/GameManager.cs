@@ -16,8 +16,10 @@ public class GameManager : Singleton<GameManager>
         levelCompleted = false;
         runningProgram = false;
         currentLevel.programSpotsUsed = 0;
+        currentLevel.functionSpotsUsed = 0;
 
         UIController.I.RestartUI();
+        UIController.I.OnMainProgramSelected();
 
         currentLevel.StopAllCoroutines();
         StopAllCoroutines();

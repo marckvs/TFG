@@ -19,6 +19,9 @@ public class UIController : Singleton<UIController> {
     public Image checkpointImage;
     public Image jumpImage;
 
+    public Image MainProgram;
+    public Image FunctionProgram;
+
     public Image programSpot1;
     public Image programSpot2;
     public Image programSpot3;
@@ -26,16 +29,24 @@ public class UIController : Singleton<UIController> {
     public Image programSpot5;
     public Image programSpot6;
 
-    public int programButtonPressed;
-    public bool isProgramButtonPressed;
+    public Image functionSpot1;
+    public Image functionSpot2;
+    public Image functionSpot3;
+    public Image functionSpot4;
+    public Image functionSpot5;
+
+
+    public int programButtonPressed = 0;
+    public bool isProgramButtonPressed = false;
+
+    public bool mainProgramButtonPressed;
+    public bool functionProgramButtonPressed;
 
     [HideInInspector]
     public Image[] programSpots;
+    public Image[] functionSpots;
     [HideInInspector]
     public PlayerController playerController;
-
-    private float timerDeleteCommand = 0;
-    private float timeToDeleteCommand = 1;
 
     private bool deleteActivated = false;
 
@@ -51,8 +62,12 @@ public class UIController : Singleton<UIController> {
         programSpots[4] = programSpot5;
         programSpots[5] = programSpot6;
 
-        programButtonPressed = 0;
-        isProgramButtonPressed = false;
+        functionSpots = new Image[5];
+        functionSpots[0] = functionSpot1;
+        functionSpots[1] = functionSpot2;
+        functionSpots[2] = functionSpot3;
+        functionSpots[3] = functionSpot4;
+        functionSpots[4] = functionSpot5;
     }
 
     #region MainMenuUI
@@ -88,10 +103,47 @@ public class UIController : Singleton<UIController> {
 
     #region InGameMenu
 
+    public void OnMainProgramSelected()
+    {
+        Debug.Log("program");
+        mainProgramButtonPressed = true;
+        functionProgramButtonPressed = false;
+
+        changeAlpha(0.6f, FunctionProgram);
+        changeAlpha(1f, MainProgram);
+
+        switchFunctionButtons(false);
+        switchProgramButtons(true);
+
+        if (deleteActivated)
+        {
+            resetDeleteButtons();
+        }
+    }
+
+    public void OnFunctionProgramSelected()
+    {
+        Debug.Log("function");
+
+        mainProgramButtonPressed = false;
+        functionProgramButtonPressed = true;
+
+        changeAlpha(0.6f, MainProgram);
+        changeAlpha(1f, FunctionProgram);
+
+        switchFunctionButtons(true);
+        switchProgramButtons(false);
+
+        if (deleteActivated)
+        {
+            resetDeleteButtons();
+        }
+    }
+
     public void OnRestartButtonPressed()
     {
         checkReferenceLevelManager();
-
+        resetDeleteButtons();
         GameManager.I.RestartLevel(levelManager);
     }
 
@@ -110,41 +162,55 @@ public class UIController : Singleton<UIController> {
         GameManager.I.runningProgram = true;
     }
 
+    private void addMovementButtonToProgram(Image[] array, ref int spotsUsed, GameObject gO)
+    {
+        if (spotsUsed < array.Length)
+        {
+            if (!isProgramButtonPressed || programButtonPressed == spotsUsed - 1)
+            {
+                changeAlpha(1, array[spotsUsed]);
+                array[spotsUsed].sprite = gO.GetComponent<Image>().sprite;
+                array[spotsUsed].GetComponent<Command>().command = gO.GetComponent<Command>().command;
+
+                spotsUsed++;
+            }
+            else
+            {
+                for (int i = spotsUsed - 1; i > programButtonPressed; i--)
+                {
+                    changeAlpha(1, array[i + 1]);
+                    array[i + 1].sprite = array[i].sprite;
+                    array[i + 1].GetComponent<Command>().command = array[i].GetComponent<Command>().command;
+                }
+
+                array[programButtonPressed + 1].sprite = gO.GetComponent<Image>().sprite; ;
+                array[programButtonPressed + 1].GetComponent<Command>().command = gO.GetComponent<Command>().command;
+                changeAlpha(1, array[programButtonPressed]);
+
+                spotsUsed++;
+
+                isProgramButtonPressed = false;
+            }
+        }
+    }
+
     public void OnMovementButtonPressed(GameObject gO)
     {
         if (deleteActivated) {
-            resetDeleteButton();
+            resetDeleteButtons();
             return;
         }
 
         checkReferenceLevelManager();
 
-        if (levelManager.programSpotsUsed < programSpots.Length)
+        if (mainProgramButtonPressed)
         {
-            if (!isProgramButtonPressed || programButtonPressed == levelManager.programSpotsUsed - 1)
-            {
-                changeAlpha(1, programSpots[levelManager.programSpotsUsed]);
-                programSpots[levelManager.programSpotsUsed].sprite = gO.GetComponent<Image>().sprite;
-                programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = gO.GetComponent<Command>().command;
-                levelManager.programSpotsUsed++;
-            }
-            else
-            {
-                for (int i = levelManager.programSpotsUsed-1; i > programButtonPressed ; i--)
-                {
-                    changeAlpha(1, programSpots[i+1]);
-                    programSpots[i + 1].sprite = programSpots[i].sprite;
-                    programSpots[i + 1].GetComponent<Command>().command = programSpots[i].GetComponent<Command>().command;
-                }
+            addMovementButtonToProgram(programSpots, ref levelManager.programSpotsUsed, gO);
+        }
 
-                programSpots[programButtonPressed + 1].sprite = gO.GetComponent<Image>().sprite;;
-                programSpots[programButtonPressed + 1].GetComponent<Command>().command = gO.GetComponent<Command>().command;
-                changeAlpha(1, programSpots[programButtonPressed]);
-
-                levelManager.programSpotsUsed++;
-
-                isProgramButtonPressed = false;
-            }
+        else if (functionProgramButtonPressed)
+        {
+            addMovementButtonToProgram(functionSpots, ref levelManager.functionSpotsUsed, gO);
         }
     }
 
@@ -156,7 +222,7 @@ public class UIController : Singleton<UIController> {
     {
         if (deleteActivated)
         {
-            resetDeleteButton();
+            resetDeleteButtons();
             return;
         }
 
@@ -189,34 +255,52 @@ public class UIController : Singleton<UIController> {
     public void OnDeleteCommandPressed()
     {
         Debug.Log(programButtonPressed);
-        for (int i = programButtonPressed; i < levelManager.programSpotsUsed - 1; i++)
+        if (mainProgramButtonPressed)
         {
-            programSpots[i].sprite = programSpots[i+1].sprite;
-            programSpots[i].GetComponent<Command>().command = programSpots[i+1].GetComponent<Command>().command;
+            deleteCommand(programSpots, ref levelManager.programSpotsUsed);
         }
 
-        programSpots[levelManager.programSpotsUsed-1].sprite = null;
-        programSpots[levelManager.programSpotsUsed-1].GetComponent<Command>().command = COMMAND.none;
-        changeAlpha(0, programSpots[levelManager.programSpotsUsed-1]);
-        //changeAlpha(1, programSpots[programButtonPressed]);
-        levelManager.programSpotsUsed--;
+        else if (functionProgramButtonPressed)
+        {
+            deleteCommand(functionSpots, ref levelManager.functionSpotsUsed);
+        }
 
-        if (deleteActivated) resetDeleteButton();
+        if (deleteActivated) resetDeleteButtons();
+    }
+
+    private void deleteCommand(Image[] array, ref int spotsUsed)
+    {
+        for (int i = programButtonPressed; i < spotsUsed - 1; i++)
+        {
+            array[i].sprite = array[i + 1].sprite;
+            array[i].GetComponent<Command>().command = array[i + 1].GetComponent<Command>().command;
+        }
+
+        array[spotsUsed - 1].sprite = null;
+        array[spotsUsed - 1].GetComponent<Command>().command = COMMAND.none;
+        changeAlpha(0, array[spotsUsed - 1]);
+        spotsUsed--;
     }
     #endregion
 
     public void RestartUI()
     {
-        for (int i = 0; i < programSpots.Length; i++)
-        {
-            changeAlpha(0, programSpots[i]);
-            programSpots[i].GetComponent<Command>().command = COMMAND.none;
-        }
+        restartProgramUI(programSpots);
+        restartProgramUI(functionSpots);
 
         if (deleteActivated)
         {
-            resetDeleteButton();
+            resetDeleteButtons();
             return;
+        }
+    }
+
+    private void restartProgramUI(Image[] array)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            changeAlpha(0, array[i]);
+            array[i].GetComponent<Command>().command = COMMAND.none;
         }
     }
 
@@ -227,13 +311,22 @@ public class UIController : Singleton<UIController> {
         image.color = color;
     }
 
-    private void resetDeleteButton()
+    private void resetDeleteButtons()
     {
-        for (int i = 0; i < programSpots.Length; i++)
-        {
-            programSpots[i].transform.GetChild(0).gameObject.SetActive(false);
-        }
+
+        resetDeleteProgramButtons(programSpots);
+
+        resetDeleteProgramButtons(functionSpots);
+
         deleteActivated = false;
+    }
+
+    private void resetDeleteProgramButtons(Image[] array)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            array[i].transform.GetChild(0).gameObject.SetActive(false);
+        }
     }
 
     private void checkReferenceLevelManager()
@@ -241,6 +334,22 @@ public class UIController : Singleton<UIController> {
         if(levelManager == null)
         {
             levelManager = FindObjectOfType<LevelManager>();
+        }
+    }
+
+    private void switchProgramButtons(bool b)
+    {
+        for (int i = 0; i < programSpots.Length; i++)
+        {
+            programSpots[i].GetComponent<Button>().interactable = b;
+        }
+    }
+
+    private void switchFunctionButtons(bool b)
+    {
+        for (int i = 0; i < functionSpots.Length; i++)
+        {
+            functionSpots[i].GetComponent<Button>().interactable = b;
         }
     }
 }

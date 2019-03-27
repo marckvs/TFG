@@ -13,15 +13,21 @@ public class LevelManager : MonoBehaviour {
     public Cell previousCellChecked;
 
     public int programSpotsUsed = 0;
+    public int functionSpotsUsed = 0;
 
     public int nCheckpoints = 0;
     public int checkpointsChecked = 0;
 
     private Image[] programCommands;
+    private Image[] functionCommands;
+
+    private List<COMMAND> commandsToExecute;
+
     private PlayerController playerController;
 
     void Awake()
     {
+        commandsToExecute = new List<COMMAND>();
         playerController = FindObjectOfType<PlayerController>();
         cells = FindObjectsOfType<Cell>();
         SetCells();
@@ -30,13 +36,13 @@ public class LevelManager : MonoBehaviour {
 
     public IEnumerator RunProgram()
     {
-        programCommands = UIController.I.programSpots;
+        buildSequenceOfcommands();
 
         if (programSpotsUsed > 0)
         {
-            for (int i = 0; i < programCommands.Length; i++)
+            for (int i = 0; i < commandsToExecute.Count; i++)
             {
-                commandToAction(programCommands[i].GetComponent<Command>().command);
+                commandToAction(commandsToExecute[i]);
                 yield return new WaitForSeconds(1f);
             }
 
@@ -44,7 +50,6 @@ public class LevelManager : MonoBehaviour {
             StopCoroutine(GameManager.I.CheckNotRunningProgram());
             StartCoroutine(GameManager.I.CheckNotRunningProgram());
         }
-
     }
 
     public void LevelCompleted()
@@ -58,10 +63,16 @@ public class LevelManager : MonoBehaviour {
         playerController.actualCell = initialCell;
 
         playerController.SetPlayerInitialTransition();
-
     }
 
-    public void checkPoint()
+    public void RestartLevelManager()
+    {
+        checkpointsChecked = 0;
+        previousCellChecked = null;
+        SpawnPlayer();
+    }
+
+    private void checkPoint()
     {
         if (playerController.actualCell.isCheckpoint)
         {
@@ -83,13 +94,6 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    public void RestartLevelManager()
-    {
-        checkpointsChecked = 0;
-        previousCellChecked = null;
-        SpawnPlayer();
-    }
-
     private void SetCells()
     {
         for (int i = 0; i < cells.Length; i++)
@@ -99,6 +103,36 @@ public class LevelManager : MonoBehaviour {
             {
                 nCheckpoints++;
             }
+        }
+    }
+
+    private void buildSequenceOfcommands()
+    {
+        programCommands = UIController.I.programSpots;
+        functionCommands = UIController.I.functionSpots;
+
+        for (int i = 0; i < programCommands.Length; i++)
+        {
+            COMMAND commandPr = programCommands[i].GetComponent<Command>().command;
+            if (commandPr != COMMAND.function)
+            {
+                if (commandPr != COMMAND.none) ;
+                    commandsToExecute.Add(commandPr);
+            }
+            else if (commandPr == COMMAND.function)
+            {
+                for (int j = 0; j < functionCommands.Length; j++)
+                {
+                    COMMAND commandFunc = functionCommands[j].GetComponent<Command>().command;
+                    if (commandFunc != COMMAND.none)
+                        commandsToExecute.Add(commandFunc);
+                }
+            }
+        }
+
+        for (int i = 0; i < commandsToExecute.Count; i++)
+        {
+            Debug.Log(commandsToExecute[i].ToString() + ", pos = " + i.ToString());
         }
     }
 

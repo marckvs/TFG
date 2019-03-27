@@ -9,7 +9,7 @@ public enum TRANSITION
 
 public enum TRANSITIONDIRECTION
 {
-    forward = 0, downwards = 1, upwards = 2
+    forward = 0, downwards = 1, backwards = 2, upwards = 3
 }
 
 [System.Serializable]
