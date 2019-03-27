@@ -37,6 +37,8 @@ public class UIController : Singleton<UIController> {
     private float timerDeleteCommand = 0;
     private float timeToDeleteCommand = 1;
 
+    private bool deleteActivated = false;
+
     //TODO FIX CAPITAL LETTERS
 
     void Awake()
@@ -103,12 +105,18 @@ public class UIController : Singleton<UIController> {
     public void OnRunLevelButtonPressed()
     {
         checkReferenceLevelManager();
+        //if (deletePressed) resetDeleteButton();
 
         GameManager.I.runningProgram = true;
     }
 
     public void OnMovementButtonPressed(GameObject gO)
     {
+        if (deleteActivated) {
+            resetDeleteButton();
+            return;
+        }
+
         checkReferenceLevelManager();
 
         if (levelManager.programSpotsUsed < programSpots.Length)
@@ -146,6 +154,12 @@ public class UIController : Singleton<UIController> {
 
     public void OnMainProgramButtonPressed(Command command)
     {
+        if (deleteActivated)
+        {
+            resetDeleteButton();
+            return;
+        }
+
         if (command.command != COMMAND.none)
         {
             changeAlpha(1f, programSpots[programButtonPressed]);
@@ -153,8 +167,6 @@ public class UIController : Singleton<UIController> {
 
             if (command.command != COMMAND.none)
             {
-                //Debug.Log(programButtonPressed);
-                //Debug.Log(levelManager.programSpotsUsed);
                 changeAlpha(0.6f, programSpots[programButtonPressed]);
                 isProgramButtonPressed = true;
             }
@@ -164,15 +176,19 @@ public class UIController : Singleton<UIController> {
 
     public void OnMainProgramButtonHold(Button button)
     {
-        if(button.GetComponentInParent<Command>().command != COMMAND.none)
+
+        if (button.GetComponentInParent<Command>().command != COMMAND.none)
         {
+            programButtonPressed = button.GetComponentInParent<Command>().commandPosition;
             Debug.Log("dentro");
+            deleteActivated = true;
             button.gameObject.SetActive(true);
         }
     }
 
     public void OnDeleteCommandPressed()
     {
+        Debug.Log(programButtonPressed);
         for (int i = programButtonPressed; i < levelManager.programSpotsUsed - 1; i++)
         {
             programSpots[i].sprite = programSpots[i+1].sprite;
@@ -182,7 +198,10 @@ public class UIController : Singleton<UIController> {
         programSpots[levelManager.programSpotsUsed-1].sprite = null;
         programSpots[levelManager.programSpotsUsed-1].GetComponent<Command>().command = COMMAND.none;
         changeAlpha(0, programSpots[levelManager.programSpotsUsed-1]);
+        //changeAlpha(1, programSpots[programButtonPressed]);
         levelManager.programSpotsUsed--;
+
+        if (deleteActivated) resetDeleteButton();
     }
     #endregion
 
@@ -193,6 +212,12 @@ public class UIController : Singleton<UIController> {
             changeAlpha(0, programSpots[i]);
             programSpots[i].GetComponent<Command>().command = COMMAND.none;
         }
+
+        if (deleteActivated)
+        {
+            resetDeleteButton();
+            return;
+        }
     }
 
     private void changeAlpha(float alpha, Image image)
@@ -200,6 +225,15 @@ public class UIController : Singleton<UIController> {
         Color color = image.color;
         color.a = alpha;
         image.color = color;
+    }
+
+    private void resetDeleteButton()
+    {
+        for (int i = 0; i < programSpots.Length; i++)
+        {
+            programSpots[i].transform.GetChild(0).gameObject.SetActive(false);
+        }
+        deleteActivated = false;
     }
 
     private void checkReferenceLevelManager()

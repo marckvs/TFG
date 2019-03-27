@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 647488999}
   - component: {fileID: 647489000}
   m_Layer: 11
-  m_Name: New Sprite (2)
+  m_Name: checkpointCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1129,7 +1129,7 @@ GameObject:
   - component: {fileID: 1432438715}
   - component: {fileID: 1432438716}
   m_Layer: 11
-  m_Name: New Sprite (3)
+  m_Name: checkpointCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1262,7 +1262,7 @@ GameObject:
   - component: {fileID: 1816633288}
   - component: {fileID: 1816633289}
   m_Layer: 10
-  m_Name: New Sprite
+  m_Name: normalCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1442,7 +1442,7 @@ GameObject:
   - component: {fileID: 2014674028}
   - component: {fileID: 2014674029}
   m_Layer: 10
-  m_Name: New Sprite (1)
+  m_Name: normalCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1542,7 +1542,7 @@ GameObject:
   - component: {fileID: 2094377222}
   - component: {fileID: 2094377221}
   m_Layer: 10
-  m_Name: New Sprite (4)
+  m_Name: normalCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
