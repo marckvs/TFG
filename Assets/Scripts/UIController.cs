@@ -122,7 +122,6 @@ public class UIController : Singleton<UIController> {
             }
             else
             {
-                Debug.Log(programButtonPressed);
                 for (int i = levelManager.programSpotsUsed-1; i > programButtonPressed ; i--)
                 {
                     changeAlpha(1, programSpots[i+1]);
@@ -147,25 +146,43 @@ public class UIController : Singleton<UIController> {
 
     public void OnMainProgramButtonPressed(Command command)
     {
-        changeAlpha(1f, programSpots[programButtonPressed]);
-        programButtonPressed = command.commandPosition;
-
         if (command.command != COMMAND.none)
         {
-            //Debug.Log(programButtonPressed);
-            //Debug.Log(levelManager.programSpotsUsed);
-            changeAlpha(0.6f, programSpots[programButtonPressed]);
-            isProgramButtonPressed = true;
+            changeAlpha(1f, programSpots[programButtonPressed]);
+            programButtonPressed = command.commandPosition;
+
+            if (command.command != COMMAND.none)
+            {
+                //Debug.Log(programButtonPressed);
+                //Debug.Log(levelManager.programSpotsUsed);
+                changeAlpha(0.6f, programSpots[programButtonPressed]);
+                isProgramButtonPressed = true;
+            }
+            else isProgramButtonPressed = false;
         }
-        else isProgramButtonPressed = false;
     }
 
     public void OnMainProgramButtonHold(Button button)
     {
-        //if(button.GetComponentInParent<Command>().command != COMMAND.none)
-        //{
-            changeAlpha(1, button.GetComponent<Image>());
-        //}
+        if(button.GetComponentInParent<Command>().command != COMMAND.none)
+        {
+            Debug.Log("dentro");
+            button.gameObject.SetActive(true);
+        }
+    }
+
+    public void OnDeleteCommandPressed()
+    {
+        for (int i = programButtonPressed; i < levelManager.programSpotsUsed - 1; i++)
+        {
+            programSpots[i].sprite = programSpots[i+1].sprite;
+            programSpots[i].GetComponent<Command>().command = programSpots[i+1].GetComponent<Command>().command;
+        }
+
+        programSpots[levelManager.programSpotsUsed-1].sprite = null;
+        programSpots[levelManager.programSpotsUsed-1].GetComponent<Command>().command = COMMAND.none;
+        changeAlpha(0, programSpots[levelManager.programSpotsUsed-1]);
+        levelManager.programSpotsUsed--;
     }
     #endregion
 
