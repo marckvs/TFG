@@ -34,6 +34,9 @@ public class UIController : Singleton<UIController> {
     [HideInInspector]
     public PlayerController playerController;
 
+    private float timerDeleteCommand = 0;
+    private float timeToDeleteCommand = 1;
+
     //TODO FIX CAPITAL LETTERS
 
     void Awake()
@@ -112,7 +115,7 @@ public class UIController : Singleton<UIController> {
         {
             if (!isProgramButtonPressed || programButtonPressed == levelManager.programSpotsUsed - 1)
             {
-                changeAlpha(1, levelManager.programSpotsUsed);
+                changeAlpha(1, programSpots[levelManager.programSpotsUsed]);
                 programSpots[levelManager.programSpotsUsed].sprite = gO.GetComponent<Image>().sprite;
                 programSpots[levelManager.programSpotsUsed].GetComponent<Command>().command = gO.GetComponent<Command>().command;
                 levelManager.programSpotsUsed++;
@@ -122,14 +125,14 @@ public class UIController : Singleton<UIController> {
                 Debug.Log(programButtonPressed);
                 for (int i = levelManager.programSpotsUsed-1; i > programButtonPressed ; i--)
                 {
-                    changeAlpha(1, i + 1);
+                    changeAlpha(1, programSpots[i+1]);
                     programSpots[i + 1].sprite = programSpots[i].sprite;
                     programSpots[i + 1].GetComponent<Command>().command = programSpots[i].GetComponent<Command>().command;
                 }
 
                 programSpots[programButtonPressed + 1].sprite = gO.GetComponent<Image>().sprite;;
                 programSpots[programButtonPressed + 1].GetComponent<Command>().command = gO.GetComponent<Command>().command;
-                changeAlpha(1, programButtonPressed);
+                changeAlpha(1, programSpots[programButtonPressed]);
 
                 levelManager.programSpotsUsed++;
 
@@ -144,17 +147,25 @@ public class UIController : Singleton<UIController> {
 
     public void OnMainProgramButtonPressed(Command command)
     {
-        changeAlpha(1f, programButtonPressed);
+        changeAlpha(1f, programSpots[programButtonPressed]);
         programButtonPressed = command.commandPosition;
 
         if (command.command != COMMAND.none)
         {
             //Debug.Log(programButtonPressed);
             //Debug.Log(levelManager.programSpotsUsed);
-            changeAlpha(0.6f, programButtonPressed);
+            changeAlpha(0.6f, programSpots[programButtonPressed]);
             isProgramButtonPressed = true;
         }
         else isProgramButtonPressed = false;
+    }
+
+    public void OnMainProgramButtonHold(Button button)
+    {
+        //if(button.GetComponentInParent<Command>().command != COMMAND.none)
+        //{
+            changeAlpha(1, button.GetComponent<Image>());
+        //}
     }
     #endregion
 
@@ -162,16 +173,16 @@ public class UIController : Singleton<UIController> {
     {
         for (int i = 0; i < programSpots.Length; i++)
         {
-            changeAlpha(0, i);
+            changeAlpha(0, programSpots[i]);
             programSpots[i].GetComponent<Command>().command = COMMAND.none;
         }
     }
 
-    private void changeAlpha(float alpha, int position)
+    private void changeAlpha(float alpha, Image image)
     {
-        Color color = programSpots[position].color;
+        Color color = image.color;
         color.a = alpha;
-        programSpots[position].color = color;
+        image.color = color;
     }
 
     private void checkReferenceLevelManager()
