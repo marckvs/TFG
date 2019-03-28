@@ -53,5 +53,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cells: []
   LevelId: 0
-  spawnPoint: {fileID: 0}
+  initialCell: {fileID: 0}
+  previousCellChecked: {fileID: 0}
   programSpotsUsed: 0
+  functionSpotsUsed: 0
+  loopSpotsUsed: 0
+  nCheckpoints: 0
+  checkpointsChecked: 0
+  levelClass: 0

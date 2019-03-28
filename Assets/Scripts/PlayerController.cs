@@ -17,13 +17,18 @@ public class PlayerController : MonoBehaviour {
         tr = gameObject.GetComponent<Transform>();
     }
 
-    public void Move()
+    public void Move(COMMAND c)
     {
         if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed move");
+        else if((actualTransition.transition == TRANSITION.jump && c == COMMAND.walk) ||
+            (actualTransition.transition == TRANSITION.walk && c == COMMAND.jump))
+        {
+            Debug.LogError("you missed move");
+        }
         else
         {
             actualCell = actualTransition.cell;
-            actualTransition = actualCell.transitionForward;
+            actualTransition = actualCell.TransitionsFromCell[idActualTransition];
             tr.position = new Vector3(actualCell.cellPosX, actualCell.cellPosY, 0f);
         }
     }
@@ -34,10 +39,9 @@ public class PlayerController : MonoBehaviour {
         if (idActualTransition < actualCell.TransitionsFromCell.Length -1) idActualTransition++;
         else
         {
-            idActualTransition = 0;
+            idActualTransition = (int)TRANSITIONDIRECTION.forward;
         }
         actualTransition = actualCell.TransitionsFromCell[idActualTransition];
-        if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed right");
     }
 
     public void turnLeft()
@@ -48,7 +52,6 @@ public class PlayerController : MonoBehaviour {
             idActualTransition = actualCell.TransitionsFromCell.Length - 1;
         }
         actualTransition = actualCell.TransitionsFromCell[idActualTransition];
-        if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed right");
     }
 
     public void SetPlayerInitialTransition()

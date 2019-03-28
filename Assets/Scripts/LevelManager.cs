@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour {
 
     public int programSpotsUsed = 0;
     public int functionSpotsUsed = 0;
+    public int loopSpotsUsed = 0;
 
     public int nCheckpoints = 0;
     public int checkpointsChecked = 0;
@@ -44,7 +45,7 @@ public class LevelManager : MonoBehaviour {
             for (int i = 0; i < commandsToExecute.Count; i++)
             {
                 commandToAction(commandsToExecute[i]);
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(2f);
             }
 
             SpawnPlayer();
@@ -87,6 +88,10 @@ public class LevelManager : MonoBehaviour {
                 checkpointsChecked++;
             }
         }
+        else
+        {
+            Debug.LogError("you missed checkpoint");
+        }
 
         previousCellChecked = playerController.actualCell;
 
@@ -113,12 +118,14 @@ public class LevelManager : MonoBehaviour {
         programCommands = UIController.I.programSpots;
         functionCommands = UIController.I.functionSpots;
 
+        if (commandsToExecute.Count != 0) commandsToExecute.Clear();
+
         for (int i = 0; i < programCommands.Length; i++)
         {
             COMMAND commandPr = programCommands[i].GetComponent<Command>().command;
             if (commandPr != COMMAND.function)
             {
-                if (commandPr != COMMAND.none) ;
+                if (commandPr != COMMAND.none) 
                     commandsToExecute.Add(commandPr);
             }
             else if (commandPr == COMMAND.function)
@@ -140,13 +147,14 @@ public class LevelManager : MonoBehaviour {
 
     private void commandToAction(COMMAND command)
     {
+        Debug.Log(command.ToString());
         switch (command)
         {
-            case COMMAND.move:
-                playerController.Move();
+            case COMMAND.walk:
+                playerController.Move(COMMAND.walk);
                 break;
             case COMMAND.jump:
-                playerController.Move();
+                playerController.Move(COMMAND.jump);
                 break;
             case COMMAND.turnLeft:
                 playerController.turnLeft();

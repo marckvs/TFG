@@ -35,7 +35,14 @@ public class UIController : Singleton<UIController> {
     public Image functionSpot3;
     public Image functionSpot4;
     public Image functionSpot5;
+    public Image functionSpot6;
 
+    public Image loopSpot1;
+    public Image loopSpot2;
+    public Image loopSpot3;
+    public Image loopSpot4;
+    public Image loopSpot5;
+    public Image loopSpot6;
 
     public int programButtonPressed = 0;
     public bool isProgramButtonPressed = false;
@@ -45,7 +52,10 @@ public class UIController : Singleton<UIController> {
 
     [HideInInspector]
     public Image[] programSpots;
+    [HideInInspector]
     public Image[] functionSpots;
+    [HideInInspector]
+    public Image[] loopSpots;
     [HideInInspector]
     public PlayerController playerController;
 
@@ -65,12 +75,21 @@ public class UIController : Singleton<UIController> {
         programSpots[4] = programSpot5;
         programSpots[5] = programSpot6;
 
-        functionSpots = new Image[5];
+        functionSpots = new Image[6];
         functionSpots[0] = functionSpot1;
         functionSpots[1] = functionSpot2;
         functionSpots[2] = functionSpot3;
         functionSpots[3] = functionSpot4;
         functionSpots[4] = functionSpot5;
+        functionSpots[5] = functionSpot6;
+
+        loopSpots = new Image[6];
+        loopSpots[0] = loopSpot1;
+        loopSpots[1] = loopSpot2;
+        loopSpots[2] = loopSpot3;
+        loopSpots[3] = loopSpot4;
+        loopSpots[4] = loopSpot5;
+        loopSpots[5] = loopSpot6;
     }
 
     #region MainMenuUI

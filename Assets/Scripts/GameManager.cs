@@ -22,6 +22,7 @@ public class GameManager : Singleton<GameManager>
         runningProgram = false;
         currentLevel.programSpotsUsed = 0;
         currentLevel.functionSpotsUsed = 0;
+        currentLevel.loopSpotsUsed = 0;
 
         UIController.I.ProgramController();
         UIController.I.RestartUI();
