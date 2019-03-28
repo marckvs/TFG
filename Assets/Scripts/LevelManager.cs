@@ -39,6 +39,7 @@ public class LevelManager : MonoBehaviour {
     public IEnumerator RunProgram()
     {
         buildSequenceOfcommands();
+        StartCoroutine(CheckLevelFailed());
 
         if (programSpotsUsed > 0)
         {
@@ -47,11 +48,29 @@ public class LevelManager : MonoBehaviour {
                 commandToAction(commandsToExecute[i]);
                 yield return new WaitForSeconds(2f);
             }
-
+            
             SpawnPlayer();
+            StopCoroutine(CheckLevelFailed());
             StopCoroutine(GameManager.I.CheckNotRunningProgram());
             StartCoroutine(GameManager.I.CheckNotRunningProgram());
         }
+    }
+
+    public IEnumerator CheckLevelFailed()
+    {
+        while (!playerController.isLevelFailed)
+        {
+            yield return null;
+        }
+        LevelFailed();
+        yield return new WaitForSeconds(2f);
+        playerController.isLevelFailed = false;
+        GameManager.I.RestartLevel(this);
+    }
+
+    public void LevelFailed()
+    {
+        Debug.Log("LevelFailed");
     }
 
     public void LevelCompleted()
@@ -91,6 +110,7 @@ public class LevelManager : MonoBehaviour {
         else
         {
             Debug.LogError("you missed checkpoint");
+            playerController.isLevelFailed = true;
         }
 
         previousCellChecked = playerController.actualCell;
@@ -165,9 +185,7 @@ public class LevelManager : MonoBehaviour {
             case COMMAND.checkPoint:
                 checkPoint();
                 break;
-           
-            //TODO CHECKPOINT
-
+          
         }
     }
 }

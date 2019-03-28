@@ -18,6 +18,7 @@ public class UIController : Singleton<UIController> {
     public Image turnRightImage;
     public Image checkpointImage;
     public Image jumpImage;
+    public Image functionImage;
 
     public Image MainProgram;
     public Image FunctionProgram;
@@ -135,6 +136,7 @@ public class UIController : Singleton<UIController> {
             LoopProgram.gameObject.SetActive(false);
             isFunctionProgram = false;
             isLoopProgram = false;
+            functionImage.gameObject.SetActive(false);
         }
 
         else if (levelManager.levelClass == LEVELCLASS.function)
@@ -143,6 +145,7 @@ public class UIController : Singleton<UIController> {
             LoopProgram.gameObject.SetActive(false);
             isFunctionProgram = true;
             isLoopProgram = false;
+            functionImage.gameObject.SetActive(true);
         }
 
         if (levelManager.levelClass == LEVELCLASS.loop)
@@ -151,6 +154,11 @@ public class UIController : Singleton<UIController> {
             LoopProgram.gameObject.SetActive(true);
             isFunctionProgram = false;
             isLoopProgram = true;
+            functionImage.gameObject.SetActive(true);
+            loopSpots[loopSpots.Length - 1].GetComponent<Command>().command = COMMAND.function;
+            loopSpots[loopSpots.Length - 1].sprite = functionImage.sprite;
+            loopSpots[loopSpots.Length - 1].GetComponent<Button>().interactable = false;
+            changeAlpha(1, loopSpots[loopSpots.Length - 1]);
         }
 
         OnMainProgramSelected();

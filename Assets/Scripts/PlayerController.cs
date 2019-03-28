@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
     public Cell actualCell;
     public Transition actualTransition;
     public int idActualTransition;
+    public bool isLevelFailed = false;
 
     void Start()
     {
@@ -19,11 +20,17 @@ public class PlayerController : MonoBehaviour {
 
     public void Move(COMMAND c)
     {
-        if (actualTransition.transition == TRANSITION.none) Debug.LogError("you missed move");
-        else if((actualTransition.transition == TRANSITION.jump && c == COMMAND.walk) ||
+        if (actualTransition.transition == TRANSITION.none)
+        {
+            Debug.LogError("you missed move");
+            isLevelFailed = true;
+        }
+        else if ((actualTransition.transition == TRANSITION.jump && c == COMMAND.walk) ||
             (actualTransition.transition == TRANSITION.walk && c == COMMAND.jump))
         {
             Debug.LogError("you missed move");
+            isLevelFailed = true;
+
         }
         else
         {
