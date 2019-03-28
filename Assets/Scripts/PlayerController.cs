@@ -30,7 +30,8 @@ public class PlayerController : MonoBehaviour {
 
     public void turnRight()
     {
-        if (idActualTransition < actualCell.TransitionsFromCell.Length) idActualTransition++;
+        Debug.Log(idActualTransition);
+        if (idActualTransition < actualCell.TransitionsFromCell.Length -1) idActualTransition++;
         else
         {
             idActualTransition = 0;

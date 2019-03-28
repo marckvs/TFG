@@ -18,6 +18,8 @@ public class LevelManager : MonoBehaviour {
     public int nCheckpoints = 0;
     public int checkpointsChecked = 0;
 
+    public LEVELCLASS levelClass;
+
     private Image[] programCommands;
     private Image[] functionCommands;
 
@@ -27,7 +29,6 @@ public class LevelManager : MonoBehaviour {
 
     void Awake()
     {
-        commandsToExecute = new List<COMMAND>();
         playerController = FindObjectOfType<PlayerController>();
         cells = FindObjectsOfType<Cell>();
         SetCells();
@@ -67,6 +68,7 @@ public class LevelManager : MonoBehaviour {
 
     public void RestartLevelManager()
     {
+        commandsToExecute = new List<COMMAND>();
         checkpointsChecked = 0;
         previousCellChecked = null;
         SpawnPlayer();

@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum LEVELCLASS
+{
+    lineal = 0, function = 1, loop = 2
+}
+
 [DisallowMultipleComponent]
 public class GameManager : Singleton<GameManager>
 {
@@ -18,8 +23,8 @@ public class GameManager : Singleton<GameManager>
         currentLevel.programSpotsUsed = 0;
         currentLevel.functionSpotsUsed = 0;
 
+        UIController.I.ProgramController();
         UIController.I.RestartUI();
-        UIController.I.OnMainProgramSelected();
 
         currentLevel.StopAllCoroutines();
         StopAllCoroutines();

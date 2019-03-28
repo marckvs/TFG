@@ -21,6 +21,7 @@ public class UIController : Singleton<UIController> {
 
     public Image MainProgram;
     public Image FunctionProgram;
+    public Image LoopProgram;
 
     public Image programSpot1;
     public Image programSpot2;
@@ -39,8 +40,8 @@ public class UIController : Singleton<UIController> {
     public int programButtonPressed = 0;
     public bool isProgramButtonPressed = false;
 
-    public bool mainProgramButtonPressed;
-    public bool functionProgramButtonPressed;
+    public bool isMainProgramButtonPressed;
+    public bool isFunctionProgramButtonPressed;
 
     [HideInInspector]
     public Image[] programSpots;
@@ -48,7 +49,9 @@ public class UIController : Singleton<UIController> {
     [HideInInspector]
     public PlayerController playerController;
 
-    private bool deleteActivated = false;
+    private bool isDeleteActivated = false;
+    private bool isFunctionProgram;
+    private bool isLoopProgram;
 
     //TODO FIX CAPITAL LETTERS
 
@@ -103,19 +106,55 @@ public class UIController : Singleton<UIController> {
 
     #region InGameMenu
 
+    public void ProgramController()
+    {
+        checkReferenceLevelManager();
+
+        if(levelManager.levelClass == LEVELCLASS.lineal)
+        {
+            FunctionProgram.gameObject.SetActive(false);
+            LoopProgram.gameObject.SetActive(false);
+            isFunctionProgram = false;
+            isLoopProgram = false;
+        }
+
+        else if (levelManager.levelClass == LEVELCLASS.function)
+        {
+            FunctionProgram.gameObject.SetActive(true);
+            LoopProgram.gameObject.SetActive(false);
+            isFunctionProgram = true;
+            isLoopProgram = false;
+        }
+
+        if (levelManager.levelClass == LEVELCLASS.loop)
+        {
+            FunctionProgram.gameObject.SetActive(false);
+            LoopProgram.gameObject.SetActive(true);
+            isFunctionProgram = false;
+            isLoopProgram = true;
+        }
+
+        OnMainProgramSelected();
+    }
+
     public void OnMainProgramSelected()
     {
         Debug.Log("program");
-        mainProgramButtonPressed = true;
-        functionProgramButtonPressed = false;
 
-        changeAlpha(0.6f, FunctionProgram);
+        isMainProgramButtonPressed = true;
         changeAlpha(1f, MainProgram);
-
-        switchFunctionButtons(false);
         switchProgramButtons(true);
 
-        if (deleteActivated)
+        if (isFunctionProgram)
+        {
+            isFunctionProgramButtonPressed = false;
+
+            changeAlpha(0.6f, FunctionProgram);
+
+            switchFunctionButtons(false);
+        }
+
+        if (isDeleteActivated)
         {
             resetDeleteButtons();
         }
@@ -125,8 +164,8 @@ public class UIController : Singleton<UIController> {
     {
         Debug.Log("function");
 
-        mainProgramButtonPressed = false;
-        functionProgramButtonPressed = true;
+        isMainProgramButtonPressed = false;
+        isFunctionProgramButtonPressed = true;
 
         changeAlpha(0.6f, MainProgram);
         changeAlpha(1f, FunctionProgram);
@@ -134,7 +173,7 @@ public class UIController : Singleton<UIController> {
         switchFunctionButtons(true);
         switchProgramButtons(false);
 
-        if (deleteActivated)
+        if (isDeleteActivated)
         {
             resetDeleteButtons();
         }
@@ -142,8 +181,7 @@ public class UIController : Singleton<UIController> {
 
     public void OnRestartButtonPressed()
     {
-        checkReferenceLevelManager();
-        resetDeleteButtons();
+        if (isDeleteActivated) resetDeleteButtons();
         GameManager.I.RestartLevel(levelManager);
     }
 
@@ -156,8 +194,7 @@ public class UIController : Singleton<UIController> {
 
     public void OnRunLevelButtonPressed()
     {
-        checkReferenceLevelManager();
-        //if (deletePressed) resetDeleteButton();
+        if (isDeleteActivated) resetDeleteButtons();
 
         GameManager.I.runningProgram = true;
     }
@@ -196,19 +233,17 @@ public class UIController : Singleton<UIController> {
 
     public void OnMovementButtonPressed(GameObject gO)
     {
-        if (deleteActivated) {
+        if (isDeleteActivated) {
             resetDeleteButtons();
             return;
         }
 
-        checkReferenceLevelManager();
-
-        if (mainProgramButtonPressed)
+        if (isMainProgramButtonPressed)
         {
             addMovementButtonToProgram(programSpots, ref levelManager.programSpotsUsed, gO);
         }
 
-        else if (functionProgramButtonPressed)
+        else if (isFunctionProgram && isFunctionProgramButtonPressed)
         {
             addMovementButtonToProgram(functionSpots, ref levelManager.functionSpotsUsed, gO);
         }
@@ -220,7 +255,7 @@ public class UIController : Singleton<UIController> {
 
     public void OnMainProgramButtonPressed(Command command)
     {
-        if (deleteActivated)
+        if (isDeleteActivated)
         {
             resetDeleteButtons();
             return;
@@ -240,32 +275,30 @@ public class UIController : Singleton<UIController> {
         }
     }
 
+    //OnProgramButtonHold ; se usa para todos los tipos de programa
     public void OnMainProgramButtonHold(Button button)
     {
-
         if (button.GetComponentInParent<Command>().command != COMMAND.none)
         {
             programButtonPressed = button.GetComponentInParent<Command>().commandPosition;
-            Debug.Log("dentro");
-            deleteActivated = true;
+            isDeleteActivated = true;
             button.gameObject.SetActive(true);
         }
     }
 
     public void OnDeleteCommandPressed()
     {
-        Debug.Log(programButtonPressed);
-        if (mainProgramButtonPressed)
+        if (isMainProgramButtonPressed)
         {
             deleteCommand(programSpots, ref levelManager.programSpotsUsed);
         }
 
-        else if (functionProgramButtonPressed)
+        else if (isFunctionProgramButtonPressed)
         {
             deleteCommand(functionSpots, ref levelManager.functionSpotsUsed);
         }
 
-        if (deleteActivated) resetDeleteButtons();
+        if (isDeleteActivated) resetDeleteButtons();
     }
 
     private void deleteCommand(Image[] array, ref int spotsUsed)
@@ -286,9 +319,9 @@ public class UIController : Singleton<UIController> {
     public void RestartUI()
     {
         restartProgramUI(programSpots);
-        restartProgramUI(functionSpots);
+        if(isFunctionProgram) restartProgramUI(functionSpots);
 
-        if (deleteActivated)
+        if (isDeleteActivated)
         {
             resetDeleteButtons();
             return;
@@ -316,9 +349,9 @@ public class UIController : Singleton<UIController> {
 
         resetDeleteProgramButtons(programSpots);
 
-        resetDeleteProgramButtons(functionSpots);
+        if(isFunctionProgram) resetDeleteProgramButtons(functionSpots);
 
-        deleteActivated = false;
+        isDeleteActivated = false;
     }
 
     private void resetDeleteProgramButtons(Image[] array)
