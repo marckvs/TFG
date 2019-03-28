@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class HoldDownGUIButton : UIBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
@@ -14,11 +15,15 @@ public class HoldDownGUIButton : UIBehaviour, IPointerDownHandler, IPointerUpHan
     private bool isPointerDown = false;
     private bool longPressTriggered = false;
     private float timePressStarted;
+    private Button button;
 
-
+    private void Start()
+    {
+        button = gameObject.GetComponent<Button>();
+    }
     private void Update()
     {
-        if (isPointerDown && !longPressTriggered)
+        if (isPointerDown && !longPressTriggered && button.interactable)
         {
             if (Time.time - timePressStarted > durationThreshold)
             {

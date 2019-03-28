@@ -136,7 +136,10 @@ public class LevelManager : MonoBehaviour {
     private void buildSequenceOfcommands()
     {
         programCommands = UIController.I.programSpots;
-        functionCommands = UIController.I.functionSpots;
+        if(UIController.I.isFunctionProgram)
+            functionCommands = UIController.I.functionSpots;
+        if(UIController.I.isLoopProgram)
+            functionCommands = UIController.I.loopSpots;
 
         if (commandsToExecute.Count != 0) commandsToExecute.Clear();
 
