@@ -13,6 +13,11 @@ public class UIController : Singleton<UIController> {
     public GameObject LevelMenuScreen;
     public GameObject InGameMenu;
 
+    public GameObject DisabledButtonsMainProgram;
+    public GameObject DisabledButtonsFunctionProgram;
+    public GameObject DisabledButtonsLoopProgram;
+
+
     public Image moveImage;
     public Image turnLeftImage;
     public Image turnRightImage;
@@ -165,7 +170,7 @@ public class UIController : Singleton<UIController> {
 
     public void OnMainProgramSelected()
     {
-        Debug.Log("program");
+        Debug.Log(isLoopProgram);
 
         isMainProgramButtonPressed = true;
         changeAlpha(1f, MainProgram);
@@ -188,11 +193,7 @@ public class UIController : Singleton<UIController> {
 
             switchLoopButtons(false);
         }
-
-        if (isDeleteActivated)
-        {
-            resetDeleteButtons();
-        }
+        resetDeleteButtons();   
     }
 
     public void OnFunctionProgramSelected()
@@ -496,7 +497,12 @@ public class UIController : Singleton<UIController> {
         for (int i = 0; i < programSpots.Length; i++)
         {
             programSpots[i].GetComponent<Button>().interactable = b;
+            programSpots[i].transform.SetParent(DisabledButtonsMainProgram.transform);
+            if (isLoopProgram) loopSpots[i].transform.SetParent(LoopProgram.transform);
+            if (isFunctionProgram) functionSpots[i].transform.SetParent(FunctionProgram.transform);
+
         }
+
     }
 
     private void switchFunctionButtons(bool b)
@@ -504,7 +510,10 @@ public class UIController : Singleton<UIController> {
         for (int i = 0; i < functionSpots.Length; i++)
         {
             functionSpots[i].GetComponent<Button>().interactable = b;
+            functionSpots[i].transform.SetParent(DisabledButtonsFunctionProgram.transform);
+            programSpots[i].transform.SetParent(MainProgram.transform);
         }
+
     }
 
     private void switchLoopButtons(bool b)
@@ -512,6 +521,10 @@ public class UIController : Singleton<UIController> {
         for (int i = 0; i < loopSpots.Length - 1; i++)
         {
             loopSpots[i].GetComponent<Button>().interactable = b;
+            loopSpots[i].transform.SetParent(DisabledButtonsLoopProgram.transform);
+            programSpots[i].transform.SetParent(MainProgram.transform);
+            if(i == loopSpots.Length - 1) programSpots[i+1].transform.SetParent(MainProgram.transform);
         }
     }
+
 }
