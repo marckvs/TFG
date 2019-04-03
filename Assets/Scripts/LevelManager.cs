@@ -46,9 +46,19 @@ public class LevelManager : MonoBehaviour {
             for (int i = 0; i < commandsToExecute.Count; i++)
             {
                 commandToAction(commandsToExecute[i]);
-                yield return new WaitForSeconds(2f);
+                if (i == commandsToExecute.Count - 1 && commandsToExecute[commandsToExecute.Count - 1] == COMMAND.function)
+                {
+                    for (int j = 0; j < functionCommands.Length; j++)
+                    {
+                        COMMAND commandFunc = functionCommands[j].GetComponent<Command>().command;
+                        if (commandFunc != COMMAND.none)
+                            commandsToExecute.Add(commandFunc);
+                    }
+                }
+                if(commandsToExecute[i] != COMMAND.function)
+                    yield return new WaitForSeconds(2f);
             }
-            
+
             SpawnPlayer();
             StopCoroutine(CheckLevelFailed());
             StopCoroutine(GameManager.I.CheckNotRunningProgram());
@@ -136,9 +146,9 @@ public class LevelManager : MonoBehaviour {
     private void buildSequenceOfcommands()
     {
         programCommands = UIController.I.programSpots;
-        if(UIController.I.isFunctionProgram)
+        if(UIController.I.isFunctionLevel)
             functionCommands = UIController.I.functionSpots;
-        if(UIController.I.isLoopProgram)
+        if(UIController.I.isLoopLevel)
             functionCommands = UIController.I.loopSpots;
 
         if (commandsToExecute.Count != 0) commandsToExecute.Clear();

@@ -20,7 +20,7 @@ public class Cell : MonoBehaviour{
     public void SetCell()
     {
         cellPosX = this.gameObject.transform.position.x;
-        cellPosY = this.gameObject.transform.position.y;
+        cellPosY = this.gameObject.transform.position.y + 0.40f;
 
         TransitionsFromCell = new Transition[4];
 

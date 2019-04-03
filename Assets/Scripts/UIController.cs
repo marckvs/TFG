@@ -13,10 +13,13 @@ public class UIController : Singleton<UIController> {
     public GameObject LevelMenuScreen;
     public GameObject InGameMenu;
 
+    public GameObject Scroll;
+
     public GameObject DisabledButtonsMainProgram;
     public GameObject DisabledButtonsFunctionProgram;
     public GameObject DisabledButtonsLoopProgram;
 
+    public GameObject FunctionBackImage;
 
     public Image moveImage;
     public Image turnLeftImage;
@@ -52,7 +55,7 @@ public class UIController : Singleton<UIController> {
 
     public int programButtonPressed = 0;
 
-    public bool isProgramButtonPressed = false;
+    public bool isAnyButtonPressed = false;
 
     public bool isMainProgramButtonPressed;
     public bool isFunctionProgramButtonPressed;
@@ -68,8 +71,11 @@ public class UIController : Singleton<UIController> {
     public PlayerController playerController;
 
     public bool isDeleteActivated = false;
-    public bool isFunctionProgram;
-    public bool isLoopProgram;
+    public bool isFunctionLevel;
+    public bool isLoopLevel;
+
+    private int distanceBetweenLevelsUI = 1100;
+    public int scrollVelocity;
 
     //TODO FIX CAPITAL LETTERS
 
@@ -101,6 +107,26 @@ public class UIController : Singleton<UIController> {
     }
 
     #region MainMenuUI
+
+    public void OnNextLevelsButtonPressed()
+    {
+        StartCoroutine(ScrollLevelMenu());
+    }
+
+    private IEnumerator ScrollLevelMenu()
+    {
+        float xPos = Scroll.transform.localPosition.x;
+        int i = scrollVelocity;
+        while (true)
+        {
+            if (Mathf.Abs(Scroll.transform.localPosition.x) > Mathf.Abs(xPos - distanceBetweenLevelsUI + (scrollVelocity)))
+            {
+                yield break;
+            }
+            Scroll.transform.localPosition = new Vector3(Scroll.transform.localPosition.x - i, Scroll.transform.localPosition.y, Scroll.transform.localPosition.z);
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
 
     public void OnQuitButtonPressed()
     {
@@ -137,18 +163,20 @@ public class UIController : Singleton<UIController> {
         {
             FunctionProgram.gameObject.SetActive(false);
             LoopProgram.gameObject.SetActive(false);
-            isFunctionProgram = false;
-            isLoopProgram = false;
+            isFunctionLevel = false;
+            isLoopLevel = false;
             functionImage.gameObject.SetActive(false);
+            FunctionBackImage.SetActive(false);
         }
 
         else if (levelManager.levelClass == LEVELCLASS.function)
         {
             FunctionProgram.gameObject.SetActive(true);
             LoopProgram.gameObject.SetActive(false);
-            isFunctionProgram = true;
-            isLoopProgram = false;
+            isFunctionLevel = true;
+            isLoopLevel = false;
             functionImage.gameObject.SetActive(true);
+            FunctionBackImage.SetActive(true);
         }
 
         if (levelManager.levelClass == LEVELCLASS.loop)
@@ -156,13 +184,14 @@ public class UIController : Singleton<UIController> {
             Debug.Log("loopset");
             FunctionProgram.gameObject.SetActive(false);
             LoopProgram.gameObject.SetActive(true);
-            isFunctionProgram = false;
-            isLoopProgram = true;
+            isFunctionLevel = false;
+            isLoopLevel = true;
             functionImage.gameObject.SetActive(true);
             loopSpots[loopSpots.Length - 1].GetComponent<Command>().command = COMMAND.function;
             loopSpots[loopSpots.Length - 1].sprite = functionImage.sprite;
             loopSpots[loopSpots.Length-1].GetComponent<Button>().interactable = false;
             changeAlpha(1, loopSpots[loopSpots.Length - 1]);
+            FunctionBackImage.SetActive(true);
         }
 
         OnMainProgramSelected();
@@ -170,26 +199,33 @@ public class UIController : Singleton<UIController> {
 
     public void OnMainProgramSelected()
     {
-        Debug.Log(isLoopProgram);
+        Debug.Log(isLoopLevel);
 
         isMainProgramButtonPressed = true;
         changeAlpha(1f, MainProgram);
         switchProgramButtons(true);
 
-        programButtonPressed = levelManager.programSpotsUsed;
+        isAnyButtonPressed = false;
 
-        if (isFunctionProgram)
+        changeAlpha(1, functionImage);
+        functionImage.GetComponent<Button>().interactable = true;
+
+        if (isFunctionLevel)
         {
             isFunctionProgramButtonPressed = false;
             changeAlpha(0.6f, FunctionProgram);
 
+            changeArrayAlpha(functionSpots, levelManager.functionSpotsUsed, 1);
+
             switchFunctionButtons(false);
         }
 
-        if (isLoopProgram)
+        if (isLoopLevel)
         {
             isLoopProgramButtonPressed = false;
             changeAlpha(0.6f, LoopProgram);
+
+            changeArrayAlpha(loopSpots, levelManager.loopSpotsUsed, 1);
 
             switchLoopButtons(false);
         }
@@ -200,16 +236,21 @@ public class UIController : Singleton<UIController> {
     {
         Debug.Log("function");
 
+        isAnyButtonPressed = false;
+
         isMainProgramButtonPressed = false;
         isFunctionProgramButtonPressed = true;
 
         changeAlpha(0.6f, MainProgram);
         changeAlpha(1f, FunctionProgram);
 
+        changeArrayAlpha(programSpots, levelManager.programSpotsUsed, 1);
+
         switchFunctionButtons(true);
         switchProgramButtons(false);
 
-        programButtonPressed = levelManager.functionSpotsUsed;
+        changeAlpha(0.6f, functionImage);
+        functionImage.GetComponent<Button>().interactable = false;
 
         if (isDeleteActivated)
         {
@@ -221,16 +262,21 @@ public class UIController : Singleton<UIController> {
     {
         Debug.Log("loop");
 
+        isAnyButtonPressed = false;
+
         isMainProgramButtonPressed = false;
         isLoopProgramButtonPressed = true;
 
         changeAlpha(0.6f, MainProgram);
         changeAlpha(1f, LoopProgram);
 
+        changeArrayAlpha(programSpots, levelManager.programSpotsUsed, 1);
+
         switchLoopButtons(true);
         switchProgramButtons(false);
 
-        programButtonPressed = levelManager.loopSpotsUsed;
+        changeAlpha(0.6f, functionImage);
+        functionImage.GetComponent<Button>().interactable = false;
 
         if (isDeleteActivated)
         {
@@ -265,7 +311,7 @@ public class UIController : Singleton<UIController> {
     {
         if (spotsUsed < array.Length)
         {
-            if (!isProgramButtonPressed || programButtonPressed == spotsUsed - 1)
+            if (!isAnyButtonPressed || programButtonPressed == spotsUsed - 1)
             {
                 changeAlpha(1, array[spotsUsed]);
                 array[spotsUsed].sprite = gO.GetComponent<Image>().sprite;
@@ -286,7 +332,7 @@ public class UIController : Singleton<UIController> {
                 array[programButtonPressed + 1].GetComponent<Command>().command = gO.GetComponent<Command>().command;
                 changeAlpha(1, array[programButtonPressed]);
 
-                isProgramButtonPressed = false;
+                isAnyButtonPressed = false;
             }
         }
     }
@@ -304,13 +350,13 @@ public class UIController : Singleton<UIController> {
             levelManager.programSpotsUsed++;
         }
 
-        else if (isFunctionProgram && isFunctionProgramButtonPressed && levelManager.functionSpotsUsed < functionSpots.Length)
+        else if (isFunctionLevel && isFunctionProgramButtonPressed && levelManager.functionSpotsUsed < functionSpots.Length)
         {
             addMovementButtonToProgram(functionSpots, levelManager.functionSpotsUsed, gO);
             levelManager.functionSpotsUsed++;
         }
 
-        else if(isLoopProgram && isLoopProgramButtonPressed && levelManager.loopSpotsUsed < loopSpots.Length - 1)
+        else if(isLoopLevel && isLoopProgramButtonPressed && levelManager.loopSpotsUsed < loopSpots.Length - 1)
         {
             addMovementButtonToProgram(loopSpots, levelManager.loopSpotsUsed, gO);
             levelManager.loopSpotsUsed++;          
@@ -351,9 +397,9 @@ public class UIController : Singleton<UIController> {
                     changeArrayAlpha(loopSpots, levelManager.loopSpotsUsed, 1);
                     changeAlpha(0.6f, loopSpots[programButtonPressed]);
                 }
-                isProgramButtonPressed = true;
+                isAnyButtonPressed = true;
             }
-            else isProgramButtonPressed = false;
+            else isAnyButtonPressed = false;
         }
     }
 
@@ -414,9 +460,9 @@ public class UIController : Singleton<UIController> {
     //aa
     public void RestartUI()
     {
-        restartProgramUI(programSpots);
-        if(isFunctionProgram) restartProgramUI(functionSpots);
-        if (isLoopProgram) restartProgramUI(loopSpots);
+        restartProgramUI(programSpots, false);
+        if(isFunctionLevel) restartProgramUI(functionSpots, false);
+        if (isLoopLevel) restartProgramUI(loopSpots, true);
 
         programButtonPressed = 0;
 
@@ -427,7 +473,7 @@ public class UIController : Singleton<UIController> {
         }
     }
 
-    private void restartProgramUI(Image[] array)
+    private void restartProgramUI(Image[] array, bool isLoopProgram)
     {
         if (isLoopProgram)
         {
@@ -462,8 +508,8 @@ public class UIController : Singleton<UIController> {
 
         resetDeleteProgramButtons(programSpots);
 
-        if(isFunctionProgram) resetDeleteProgramButtons(functionSpots);
-        if (isLoopProgram) resetDeleteProgramButtons(loopSpots);
+        if(isFunctionLevel) resetDeleteProgramButtons(functionSpots);
+        if (isLoopLevel) resetDeleteProgramButtons(loopSpots);
 
         isDeleteActivated = false;
     }
@@ -498,8 +544,8 @@ public class UIController : Singleton<UIController> {
         {
             programSpots[i].GetComponent<Button>().interactable = b;
             programSpots[i].transform.SetParent(DisabledButtonsMainProgram.transform);
-            if (isLoopProgram) loopSpots[i].transform.SetParent(LoopProgram.transform);
-            if (isFunctionProgram) functionSpots[i].transform.SetParent(FunctionProgram.transform);
+            if (isLoopLevel) loopSpots[i].transform.SetParent(LoopProgram.transform);
+            if (isFunctionLevel) functionSpots[i].transform.SetParent(FunctionProgram.transform);
 
         }
 
@@ -523,7 +569,7 @@ public class UIController : Singleton<UIController> {
             loopSpots[i].GetComponent<Button>().interactable = b;
             loopSpots[i].transform.SetParent(DisabledButtonsLoopProgram.transform);
             programSpots[i].transform.SetParent(MainProgram.transform);
-            if(i == loopSpots.Length - 1) programSpots[i+1].transform.SetParent(MainProgram.transform);
+            if(i == loopSpots.Length -2) programSpots[i+1].transform.SetParent(MainProgram.transform);
         }
     }
 
