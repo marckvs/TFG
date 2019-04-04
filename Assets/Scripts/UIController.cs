@@ -40,14 +40,7 @@ public class UIController : Singleton<UIController> {
     public Image FunctionProgram;
     public Image LoopProgram;
 
-    public Image[] commands;
-
-    public Image programSpot1;
-    public Image programSpot2;
-    public Image programSpot3;
-    public Image programSpot4;
-    public Image programSpot5;
-    public Image programSpot6;
+    public Image[] commands;    
 
     public Image functionSpot1;
     public Image functionSpot2;
@@ -73,7 +66,6 @@ public class UIController : Singleton<UIController> {
     public bool isFunctionProgramButtonPressed;
     public bool isLoopProgramButtonPressed;
 
-    [HideInInspector]
     public Image[] programSpots;
     [HideInInspector]
     public Image[] functionSpots;
@@ -94,13 +86,6 @@ public class UIController : Singleton<UIController> {
     void Awake()
     {
         #region initArrays
-        programSpots = new Image[6];
-        programSpots[0] = programSpot1;
-        programSpots[1] = programSpot2;
-        programSpots[2] = programSpot3;
-        programSpots[3] = programSpot4;
-        programSpots[4] = programSpot5;
-        programSpots[5] = programSpot6;
 
         functionSpots = new Image[6];
         functionSpots[0] = functionSpot1;
@@ -620,19 +605,23 @@ public class UIController : Singleton<UIController> {
         {
             programSpots[i].GetComponent<Button>().interactable = b;
             programSpots[i].transform.SetParent(DisabledButtonsMainProgram.transform);
-            if (isLoopLevel) loopSpots[i].transform.SetParent(LoopProgram.transform);
-            if (isFunctionLevel) functionSpots[i].transform.SetParent(FunctionProgram.transform);
-
+            if (i < functionSpots.Length)
+            {
+                if (isLoopLevel) loopSpots[i].transform.SetParent(LoopProgram.transform);
+                if (isFunctionLevel) functionSpots[i].transform.SetParent(FunctionProgram.transform);
+            }
         }
-
     }
 
     private void switchFunctionButtons(bool b)
     {
-        for (int i = 0; i < functionSpots.Length; i++)
+        for (int i = 0; i < programSpots.Length; i++)
         {
-            functionSpots[i].GetComponent<Button>().interactable = b;
-            functionSpots[i].transform.SetParent(DisabledButtonsFunctionProgram.transform);
+            if (i < functionSpots.Length)
+            {
+                functionSpots[i].GetComponent<Button>().interactable = b;
+                functionSpots[i].transform.SetParent(DisabledButtonsFunctionProgram.transform);
+            }
             programSpots[i].transform.SetParent(MainProgram.transform);
         }
 
@@ -640,12 +629,14 @@ public class UIController : Singleton<UIController> {
 
     private void switchLoopButtons(bool b)
     {
-        for (int i = 0; i < loopSpots.Length - 1; i++)
+        for (int i = 0; i < programSpots.Length - 1; i++)
         {
-            loopSpots[i].GetComponent<Button>().interactable = b;
-            loopSpots[i].transform.SetParent(DisabledButtonsLoopProgram.transform);
+            if (i < loopSpots.Length)
+            {
+                loopSpots[i].GetComponent<Button>().interactable = b;
+                loopSpots[i].transform.SetParent(DisabledButtonsLoopProgram.transform);
+            }
             programSpots[i].transform.SetParent(MainProgram.transform);
-            if(i == loopSpots.Length -2) programSpots[i+1].transform.SetParent(MainProgram.transform);
         }
     }
 
