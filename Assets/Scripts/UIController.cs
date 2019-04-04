@@ -21,6 +21,14 @@ public class UIController : Singleton<UIController> {
 
     public GameObject FunctionBackImage;
 
+    public Sprite ImageMainProgramLinearLevels;
+    public Sprite ImageMainProgramFunctionLevels;
+    public Sprite ImageMainProgramLoopLevels;
+
+    public Sprite ImageCommandsLinearLevels;
+    public Sprite ImageCommandsFunctionLevels;
+    public Sprite ImageCommandsLoopLevels;
+    
     public Image moveImage;
     public Image turnLeftImage;
     public Image turnRightImage;
@@ -31,6 +39,8 @@ public class UIController : Singleton<UIController> {
     public Image MainProgram;
     public Image FunctionProgram;
     public Image LoopProgram;
+
+    public Image[] commands;
 
     public Image programSpot1;
     public Image programSpot2;
@@ -52,6 +62,8 @@ public class UIController : Singleton<UIController> {
     public Image loopSpot4;
     public Image loopSpot5;
     public Image loopSpot6;
+
+    public Button nextLevelButton;
 
     public int programButtonPressed = 0;
 
@@ -81,6 +93,7 @@ public class UIController : Singleton<UIController> {
 
     void Awake()
     {
+        #region initArrays
         programSpots = new Image[6];
         programSpots[0] = programSpot1;
         programSpots[1] = programSpot2;
@@ -104,26 +117,41 @@ public class UIController : Singleton<UIController> {
         loopSpots[3] = loopSpot4;
         loopSpots[4] = loopSpot5;
         loopSpots[5] = loopSpot6;
+        #endregion
     }
 
     #region MainMenuUI
 
-    public void OnNextLevelsButtonPressed()
+    public void OnNextLevelsMenuButtonPressed(bool next)
     {
-        StartCoroutine(ScrollLevelMenu());
+        Debug.Log("in");
+        if(next)
+            StartCoroutine(ScrollLevelMenu(true));
+        else
+            StartCoroutine(ScrollLevelMenu(false));
     }
 
-    private IEnumerator ScrollLevelMenu()
+    private IEnumerator ScrollLevelMenu(bool right)
     {
         float xPos = Scroll.transform.localPosition.x;
-        int i = scrollVelocity;
         while (true)
         {
-            if (Mathf.Abs(Scroll.transform.localPosition.x) > Mathf.Abs(xPos - distanceBetweenLevelsUI + (scrollVelocity)))
+            if (right)
             {
-                yield break;
+                if (Mathf.Abs(Scroll.transform.localPosition.x) > Mathf.Abs(xPos - distanceBetweenLevelsUI + scrollVelocity))
+                {
+                    yield break;
+                }
+                Scroll.transform.localPosition = new Vector3(Scroll.transform.localPosition.x - scrollVelocity, Scroll.transform.localPosition.y, Scroll.transform.localPosition.z);
             }
-            Scroll.transform.localPosition = new Vector3(Scroll.transform.localPosition.x - i, Scroll.transform.localPosition.y, Scroll.transform.localPosition.z);
+            else
+            {
+                if (Mathf.Abs(Scroll.transform.localPosition.x) < Mathf.Abs(xPos + distanceBetweenLevelsUI - scrollVelocity))
+                {
+                    yield break;
+                }
+                Scroll.transform.localPosition = new Vector3(Scroll.transform.localPosition.x + scrollVelocity, Scroll.transform.localPosition.y, Scroll.transform.localPosition.z);
+            }
             yield return new WaitForSeconds(0.01f);
         }
     }
@@ -137,6 +165,7 @@ public class UIController : Singleton<UIController> {
     {
         MainMenuScreen.SetActive(false);
         LevelMenuScreen.SetActive(true);
+        Scroll.transform.localPosition = Vector3.zero;
     }
 
     public void OnSelectLevelButtonPressed(int buildIndex)
@@ -158,40 +187,45 @@ public class UIController : Singleton<UIController> {
     public void ProgramController()
     {
         checkReferenceLevelManager();
+        setCommands();
 
         if(levelManager.levelClass == LEVELCLASS.lineal)
         {
+            MainProgram.sprite = ImageMainProgramLinearLevels;
+            setImageCommands(ImageCommandsLinearLevels);
             FunctionProgram.gameObject.SetActive(false);
             LoopProgram.gameObject.SetActive(false);
             isFunctionLevel = false;
             isLoopLevel = false;
-            functionImage.gameObject.SetActive(false);
             FunctionBackImage.SetActive(false);
         }
 
         else if (levelManager.levelClass == LEVELCLASS.function)
         {
+            MainProgram.sprite = ImageMainProgramFunctionLevels;
+            setImageCommands(ImageCommandsFunctionLevels);
             FunctionProgram.gameObject.SetActive(true);
             LoopProgram.gameObject.SetActive(false);
             isFunctionLevel = true;
             isLoopLevel = false;
-            functionImage.gameObject.SetActive(true);
             FunctionBackImage.SetActive(true);
+
         }
 
         if (levelManager.levelClass == LEVELCLASS.loop)
         {
-            Debug.Log("loopset");
+            MainProgram.sprite = ImageMainProgramLoopLevels;
+            setImageCommands(ImageCommandsLoopLevels);
             FunctionProgram.gameObject.SetActive(false);
             LoopProgram.gameObject.SetActive(true);
             isFunctionLevel = false;
             isLoopLevel = true;
-            functionImage.gameObject.SetActive(true);
             loopSpots[loopSpots.Length - 1].GetComponent<Command>().command = COMMAND.function;
             loopSpots[loopSpots.Length - 1].sprite = functionImage.sprite;
             loopSpots[loopSpots.Length-1].GetComponent<Button>().interactable = false;
             changeAlpha(1, loopSpots[loopSpots.Length - 1]);
             FunctionBackImage.SetActive(true);
+
         }
 
         OnMainProgramSelected();
@@ -234,8 +268,6 @@ public class UIController : Singleton<UIController> {
 
     public void OnFunctionProgramSelected()
     {
-        Debug.Log("function");
-
         isAnyButtonPressed = false;
 
         isMainProgramButtonPressed = false;
@@ -260,8 +292,6 @@ public class UIController : Singleton<UIController> {
 
     public void OnLoopProgramSelected()
     {
-        Debug.Log("loop");
-
         isAnyButtonPressed = false;
 
         isMainProgramButtonPressed = false;
@@ -286,6 +316,19 @@ public class UIController : Singleton<UIController> {
     #endregion
 
     #region InGameUI
+
+    public void ShowNextLevelButton()
+    {
+        nextLevelButton.gameObject.SetActive(true);
+    }
+
+    public void OnNextLevelButtonPressed()
+    {
+        nextLevelButton.gameObject.SetActive(false);
+        SceneManager.LoadScene((int)levelManager.level + 1);
+        checkReferenceLevelManager();
+        GameManager.I.RestartLevel(levelManager);
+    }
     public void OnRestartButtonPressed()
     {
         if (isDeleteActivated) resetDeleteButtons();
@@ -457,7 +500,40 @@ public class UIController : Singleton<UIController> {
         changeAlpha(0, array[spotsUsed - 1]);
     }
     #endregion
-    //aa
+
+    #region commandsController
+
+    private void setCommands()
+    {
+        if(levelManager.level == LEVEL.level1)
+        {
+            controlVisibilityCommands(2, false);
+        }
+        else if(levelManager.level == LEVEL.level2)
+        {
+            controlVisibilityCommands(0, true);
+            controlVisibilityCommands(4, false);
+        }
+        else if(levelManager.level == LEVEL.level3)
+        {
+            controlVisibilityCommands(0, true);
+            controlVisibilityCommands(5, false);
+        }
+        else
+        {
+            controlVisibilityCommands(0, true);
+        }
+    }
+
+    private void controlVisibilityCommands(int n, bool b)
+    {
+        for (int i = n; i < commands.Length; i++)
+        {
+            commands[i].gameObject.SetActive(b);
+        }
+
+    }
+    #endregion
     public void RestartUI()
     {
         restartProgramUI(programSpots, false);
@@ -570,6 +646,14 @@ public class UIController : Singleton<UIController> {
             loopSpots[i].transform.SetParent(DisabledButtonsLoopProgram.transform);
             programSpots[i].transform.SetParent(MainProgram.transform);
             if(i == loopSpots.Length -2) programSpots[i+1].transform.SetParent(MainProgram.transform);
+        }
+    }
+
+    private void setImageCommands(Sprite s)
+    {
+        for (int i = 0; i < commands.Length; i++)
+        {
+            commands[i].GetComponent<Image>().sprite = s;
         }
     }
 

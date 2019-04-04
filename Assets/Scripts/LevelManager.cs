@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour {
     public int checkpointsChecked = 0;
 
     public LEVELCLASS levelClass;
+    public LEVEL level;
 
     private Image[] programCommands;
     private Image[] functionCommands;
@@ -79,12 +80,13 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void LevelFailed()
-    {
+    { 
         Debug.Log("LevelFailed");
     }
 
     public void LevelCompleted()
     {
+        UIController.I.ShowNextLevelButton();
         Debug.Log("levelCompleted");
     }
 

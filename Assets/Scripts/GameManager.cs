@@ -7,6 +7,11 @@ public enum LEVELCLASS
     lineal = 0, function = 1, loop = 2
 }
 
+public enum LEVEL
+{
+    level1 = 2, level2 = 3, level3 = 4, level4 = 5, level5 = 6, level6 = 7, level7 = 8, level8 = 9, level9 = 10
+}
+
 [DisallowMultipleComponent]
 public class GameManager : Singleton<GameManager>
 {
