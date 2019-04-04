@@ -59,3 +59,9 @@ TagManager:
   - name: Player
     uniqueID: 4189346933
     locked: 0
+  - name: Sixth
+    uniqueID: 1777898219
+    locked: 0
+  - name: Seventh
+    uniqueID: 2145864655
+    locked: 0
