@@ -57,10 +57,11 @@ public class LevelManager : MonoBehaviour {
                     }
                 }
                 if(commandsToExecute[i] != COMMAND.function)
-                    yield return new WaitForSeconds(2f);
+                    yield return new WaitForSeconds(.5f);
             }
 
             SpawnPlayer();
+            UIController.I.switchAllButtons(true);
             StopCoroutine(CheckLevelFailed());
             StopCoroutine(GameManager.I.CheckNotRunningProgram());
             StartCoroutine(GameManager.I.CheckNotRunningProgram());

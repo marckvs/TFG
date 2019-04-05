@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Zero
+    uniqueID: 2229851119
+    locked: 0
   - name: First
     uniqueID: 3032221203
     locked: 0
@@ -56,12 +59,21 @@ TagManager:
   - name: Fifth
     uniqueID: 694244599
     locked: 0
-  - name: Player
-    uniqueID: 4189346933
-    locked: 0
   - name: Sixth
     uniqueID: 1777898219
     locked: 0
   - name: Seventh
     uniqueID: 2145864655
+    locked: 0
+  - name: Eight
+    uniqueID: 1174118271
+    locked: 0
+  - name: Ninth
+    uniqueID: 1576419743
+    locked: 0
+  - name: Tenth
+    uniqueID: 1015019479
+    locked: 0
+  - name: Player
+    uniqueID: 4189346933
     locked: 0

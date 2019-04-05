@@ -332,6 +332,8 @@ public class UIController : Singleton<UIController> {
     {
         if (isDeleteActivated) resetDeleteButtons();
 
+        switchAllButtons(false);
+
         GameManager.I.runningProgram = true;
     }
 
@@ -436,6 +438,9 @@ public class UIController : Singleton<UIController> {
     //OnProgramButtonHold ; se usa para todos los tipos de programa
     public void OnMainProgramButtonHold(Button button)
     {
+        isAnyButtonPressed = false;
+        resetAllCommandsAlpha();
+
         if (button.GetComponentInParent<Command>().command != COMMAND.none)
         {
             programButtonPressed = button.GetComponentInParent<Command>().commandPosition;
@@ -562,9 +567,7 @@ public class UIController : Singleton<UIController> {
         image.color = color;
     }
 
-
-
-    private void resetDeleteButtons()
+      private void resetDeleteButtons()
     {
 
         resetDeleteProgramButtons(programSpots);
@@ -589,6 +592,13 @@ public class UIController : Singleton<UIController> {
         {
             changeAlpha(alphavalue, array[i]);
         }
+    }
+
+    private void resetAllCommandsAlpha()
+    {
+        changeArrayAlpha(programSpots, levelManager.programSpotsUsed, 1);
+        changeArrayAlpha(functionSpots, levelManager.functionSpotsUsed, 1);
+        changeArrayAlpha(loopSpots, levelManager.loopSpotsUsed, 1);
     }
 
     private void checkReferenceLevelManager()
@@ -633,11 +643,19 @@ public class UIController : Singleton<UIController> {
         {
             if (i < loopSpots.Length)
             {
-                loopSpots[i].GetComponent<Button>().interactable = b;
+                if(i != loopSpots.Length - 1)
+                    loopSpots[i].GetComponent<Button>().interactable = b;
                 loopSpots[i].transform.SetParent(DisabledButtonsLoopProgram.transform);
             }
             programSpots[i].transform.SetParent(MainProgram.transform);
         }
+    }
+
+    public void switchAllButtons(bool b)
+    {
+        switchFunctionButtons(b);
+        switchLoopButtons(b);
+        switchProgramButtons(b);
     }
 
     private void setImageCommands(Sprite s)
