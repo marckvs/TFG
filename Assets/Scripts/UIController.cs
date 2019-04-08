@@ -25,9 +25,9 @@ public class UIController : Singleton<UIController> {
     public Sprite ImageMainProgramFunctionLevels;
     public Sprite ImageMainProgramLoopLevels;
 
-    public Sprite ImageCommandsLinearLevels;
-    public Sprite ImageCommandsFunctionLevels;
-    public Sprite ImageCommandsLoopLevels;
+    public Sprite[] commandsLinearLevels;
+    public Sprite[] commandsFunctionLevels;
+    public Sprite[] commandsLoopLevels;
     
     public Image moveImage;
     public Image turnLeftImage;
@@ -177,18 +177,19 @@ public class UIController : Singleton<UIController> {
         if(levelManager.levelClass == LEVELCLASS.lineal)
         {
             MainProgram.sprite = ImageMainProgramLinearLevels;
-            setImageCommands(ImageCommandsLinearLevels);
+            setImageCommands(commandsLinearLevels);
             FunctionProgram.gameObject.SetActive(false);
             LoopProgram.gameObject.SetActive(false);
             isFunctionLevel = false;
             isLoopLevel = false;
             FunctionBackImage.SetActive(false);
+            Debug.Log("dentro");
         }
 
         else if (levelManager.levelClass == LEVELCLASS.function)
         {
             MainProgram.sprite = ImageMainProgramFunctionLevels;
-            setImageCommands(ImageCommandsFunctionLevels);
+            setImageCommands(commandsFunctionLevels);
             FunctionProgram.gameObject.SetActive(true);
             LoopProgram.gameObject.SetActive(false);
             isFunctionLevel = true;
@@ -200,7 +201,7 @@ public class UIController : Singleton<UIController> {
         if (levelManager.levelClass == LEVELCLASS.loop)
         {
             MainProgram.sprite = ImageMainProgramLoopLevels;
-            setImageCommands(ImageCommandsLoopLevels);
+            setImageCommands(commandsLoopLevels);
             FunctionProgram.gameObject.SetActive(false);
             LoopProgram.gameObject.SetActive(true);
             isFunctionLevel = false;
@@ -658,11 +659,12 @@ public class UIController : Singleton<UIController> {
         switchProgramButtons(b);
     }
 
-    private void setImageCommands(Sprite s)
+    private void setImageCommands(Sprite[] s)
     {
+        Debug.Log(commands.Length);
         for (int i = 0; i < commands.Length; i++)
         {
-            commands[i].GetComponent<Image>().sprite = s;
+            commands[i].GetComponent<Image>().sprite = s[i];
         }
     }
 
