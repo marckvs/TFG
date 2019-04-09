@@ -20,6 +20,8 @@ public class GameManager : Singleton<GameManager>
     public bool levelCompleted = false;
     public bool runningProgram = false;
 
+    public GameObject player;
+
     public void RestartLevel(LevelManager levelManager)
     {
         currentLevel = levelManager;
@@ -34,8 +36,8 @@ public class GameManager : Singleton<GameManager>
 
         currentLevel.StopAllCoroutines();
         StopAllCoroutines();
-        InitCoroutines();
         currentLevel.RestartLevelManager();
+        InitCoroutines();
     }
 
     public IEnumerator CheckNotRunningProgram()

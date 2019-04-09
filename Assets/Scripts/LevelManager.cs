@@ -31,7 +31,6 @@ public class LevelManager : MonoBehaviour {
 
     void Awake()
     {
-        playerController = FindObjectOfType<PlayerController>();
         cells = FindObjectsOfType<Cell>();
         SetCells();
         GameManager.I.RestartLevel(this);
@@ -101,7 +100,8 @@ public class LevelManager : MonoBehaviour {
 
     public void SpawnPlayer()
     {
-        playerController.gameObject.transform.position = new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f);
+        Instantiate(GameManager.I.player, new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f), Quaternion.Euler(new Vector3(0,140,0)));
+        playerController = FindObjectOfType<PlayerController>();
         playerController.actualCell = initialCell;
 
         playerController.SetPlayerInitialTransition();

@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour {
         {
             actualCell = actualTransition.cell;
             actualTransition = actualCell.TransitionsFromCell[idActualTransition];
-            tr.position = new Vector3(actualCell.cellPosX, actualCell.cellPosY, 0f);
+            tr.Translate(new Vector3(actualCell.cellPosX, actualCell.cellPosY, 0f) - tr.position, Space.World);
         }
     }
 
