@@ -219,8 +219,6 @@ public class UIController : Singleton<UIController> {
 
     public void OnMainProgramSelected()
     {
-        Debug.Log(isLoopLevel);
-
         isMainProgramButtonPressed = true;
         changeAlpha(1f, MainProgram);
         switchProgramButtons(true);
@@ -461,7 +459,7 @@ public class UIController : Singleton<UIController> {
         else if (isFunctionProgramButtonPressed)
         {
             deleteCommand(functionSpots, levelManager.functionSpotsUsed);
-            levelManager.functionSpotsUsed++;
+            levelManager.functionSpotsUsed--;
         }
 
         else if (isLoopProgramButtonPressed)
