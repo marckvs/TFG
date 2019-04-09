@@ -58,13 +58,19 @@ public class LevelManager : MonoBehaviour {
                 }
                 if(commandsToExecute[i] != COMMAND.function)
                     yield return new WaitForSeconds(.5f);
+                if (GameManager.I.levelCompleted)
+                {
+                    yield break;
+                }
             }
 
             SpawnPlayer();
+            UIController.I.resetCheckPointCell();
             UIController.I.switchAllButtons(true);
+
             StopCoroutine(CheckLevelFailed());
             StopCoroutine(GameManager.I.CheckNotRunningProgram());
-            StartCoroutine(GameManager.I.CheckNotRunningProgram());
+            StartCoroutine(GameManager.I.CheckNotRunningProgram());         
         }
     }
 
@@ -75,13 +81,15 @@ public class LevelManager : MonoBehaviour {
             yield return null;
         }
         LevelFailed();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(.5f);
+        UIController.I.levelFailedImage.gameObject.SetActive(false);
         playerController.isLevelFailed = false;
         GameManager.I.RestartLevel(this);
     }
 
     public void LevelFailed()
-    { 
+    {
+        UIController.I.levelFailedImage.gameObject.SetActive(true);
         Debug.Log("LevelFailed");
     }
 
@@ -102,7 +110,6 @@ public class LevelManager : MonoBehaviour {
     public void RestartLevelManager()
     {
         commandsToExecute = new List<COMMAND>();
-        checkpointsChecked = 0;
         previousCellChecked = null;
         SpawnPlayer();
     }
@@ -119,6 +126,7 @@ public class LevelManager : MonoBehaviour {
             {
                 checkpointsChecked++;
             }
+            UIController.I.setCheckPointCell(playerController.actualCell, levelClass);
         }
         else
         {

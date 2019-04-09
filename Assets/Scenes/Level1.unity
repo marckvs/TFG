@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -238,7 +238,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1229700667
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 43a827ce47e480546b9123ff7e1fa1c3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -355,7 +355,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1229700667
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 22232925e21c0a54f9d95b65d6727825, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -383,7 +383,7 @@ MonoBehaviour:
   cellPosY: 0
   isCheckpoint: 1
   transitionForward:
-    transition: 2
+    transition: 0
     cell: {fileID: 0}
   transitionDownwards:
     transition: 0
@@ -761,7 +761,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1262746093
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d29c3dae5c62025429ef93b1a804d6a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -935,7 +935,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1262746093
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 559e97b003cc9ad4994905e12c895f0d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -25,6 +25,14 @@ public class UIController : Singleton<UIController> {
     public Sprite ImageMainProgramFunctionLevels;
     public Sprite ImageMainProgramLoopLevels;
 
+    public Sprite checkPointLinear;
+    public Sprite checkPointFunction;
+    public Sprite checkPointLoop;
+
+    public Sprite checkPointLinearActivated;
+    public Sprite checkPointFunctionActivated;
+    public Sprite checkPointLoopActivated;
+
     public Sprite[] commandsLinearLevels;
     public Sprite[] commandsFunctionLevels;
     public Sprite[] commandsLoopLevels;
@@ -57,6 +65,8 @@ public class UIController : Singleton<UIController> {
     public Image loopSpot6;
 
     public Button nextLevelButton;
+    public Image nextLevelImage;
+    public Image levelFailedImage;
 
     public int programButtonPressed = 0;
 
@@ -221,7 +231,6 @@ public class UIController : Singleton<UIController> {
     {
         isMainProgramButtonPressed = true;
         changeAlpha(1f, MainProgram);
-        switchProgramButtons(true);
 
         isAnyButtonPressed = false;
 
@@ -235,6 +244,7 @@ public class UIController : Singleton<UIController> {
 
             changeArrayAlpha(functionSpots, levelManager.functionSpotsUsed, 1);
 
+            switchProgramButtons(true);
             switchFunctionButtons(false);
         }
 
@@ -245,6 +255,7 @@ public class UIController : Singleton<UIController> {
 
             changeArrayAlpha(loopSpots, levelManager.loopSpotsUsed, 1);
 
+            switchProgramButtons(true);
             switchLoopButtons(false);
         }
         resetDeleteButtons();   
@@ -304,11 +315,13 @@ public class UIController : Singleton<UIController> {
     public void ShowNextLevelButton()
     {
         nextLevelButton.gameObject.SetActive(true);
+        nextLevelImage.gameObject.SetActive(true);
     }
 
     public void OnNextLevelButtonPressed()
     {
         nextLevelButton.gameObject.SetActive(false);
+        nextLevelImage.gameObject.SetActive(false);
         SceneManager.LoadScene((int)levelManager.level + 1);
         checkReferenceLevelManager();
         GameManager.I.RestartLevel(levelManager);
@@ -442,6 +455,7 @@ public class UIController : Singleton<UIController> {
 
         if (button.GetComponentInParent<Command>().command != COMMAND.none)
         {
+            button.GetComponentInParent<Button>().interactable = false;
             programButtonPressed = button.GetComponentInParent<Command>().commandPosition;
             isDeleteActivated = true;
             button.gameObject.SetActive(true);
@@ -523,11 +537,56 @@ public class UIController : Singleton<UIController> {
 
     }
     #endregion
+
+    public void setCheckPointCell(Cell c, LEVELCLASS lc)
+    {
+        if(lc == LEVELCLASS.function)
+        {
+            c.GetComponent<SpriteRenderer>().sprite = checkPointFunctionActivated;
+        }
+        if (lc == LEVELCLASS.lineal)
+        {
+            c.GetComponent<SpriteRenderer>().sprite = checkPointLinearActivated;
+        }
+        if (lc == LEVELCLASS.loop)
+        {
+            c.GetComponent<SpriteRenderer>().sprite = checkPointLoopActivated;
+        }
+    }
+
+    public void resetCheckPointCell()
+    {
+        Cell[] cells = levelManager.cells;
+        LEVELCLASS lc = levelManager.levelClass;
+        for (int i = 0; i < cells.Length; i++)
+        {
+            if (cells[i].isCheckpoint)
+            {
+                if(lc == LEVELCLASS.lineal)
+                {
+                    cells[i].GetComponent<SpriteRenderer>().sprite = checkPointLinear;
+                }
+                if (lc == LEVELCLASS.function)
+                {
+                    cells[i].GetComponent<SpriteRenderer>().sprite = checkPointFunction;
+                }
+                if (lc == LEVELCLASS.loop)
+                {
+                    cells[i].GetComponent<SpriteRenderer>().sprite = checkPointLoop;
+                }
+            }
+        }
+
+        levelManager.checkpointsChecked = 0;
+
+    }
     public void RestartUI()
     {
         restartProgramUI(programSpots, false);
         if(isFunctionLevel) restartProgramUI(functionSpots, false);
         if (isLoopLevel) restartProgramUI(loopSpots, true);
+
+        resetCheckPointCell();
 
         programButtonPressed = 0;
 
@@ -566,22 +625,23 @@ public class UIController : Singleton<UIController> {
         image.color = color;
     }
 
-      private void resetDeleteButtons()
+    private void resetDeleteButtons()
     {
 
-        resetDeleteProgramButtons(programSpots);
+        resetDeleteProgramButtons(programSpots, programSpots.Length);
 
-        if(isFunctionLevel) resetDeleteProgramButtons(functionSpots);
-        if (isLoopLevel) resetDeleteProgramButtons(loopSpots);
+        if(isFunctionLevel) resetDeleteProgramButtons(functionSpots, functionSpots.Length);
+        if (isLoopLevel) resetDeleteProgramButtons(loopSpots, loopSpots.Length-1);
 
         isDeleteActivated = false;
     }
 
-    private void resetDeleteProgramButtons(Image[] array)
+    private void resetDeleteProgramButtons(Image[] array, int size)
     {
-        for (int i = 0; i < array.Length; i++)
+        for (int i = 0; i < size; i++)
         {
             array[i].transform.GetChild(0).gameObject.SetActive(false);
+            array[i].GetComponent<Button>().interactable = true;
         }
     }
 
@@ -665,5 +725,7 @@ public class UIController : Singleton<UIController> {
             commands[i].GetComponent<Image>().sprite = s[i];
         }
     }
+
+    
 
 }
