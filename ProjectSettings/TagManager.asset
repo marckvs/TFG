@@ -68,11 +68,11 @@ TagManager:
   - name: Eight
     uniqueID: 1174118271
     locked: 0
-  - name: Player
-    uniqueID: 4189346933
-    locked: 0
   - name: Ninth
     uniqueID: 1576419743
+    locked: 0
+  - name: Player
+    uniqueID: 4189346933
     locked: 0
   - name: Tenth
     uniqueID: 1015019479
