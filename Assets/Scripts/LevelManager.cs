@@ -26,13 +26,19 @@ public class LevelManager : MonoBehaviour {
     private Image[] functionCommands;
 
     private List<COMMAND> commandsToExecute;
+    private List<Button> buttonsCommandsToExecute;
 
     private PlayerController playerController;
+    private Vector3 initRotation;
 
     void Awake()
     {
         cells = FindObjectsOfType<Cell>();
         SetCells();
+        Instantiate(GameManager.I.player, new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f), Quaternion.Euler(new Vector3(0, 140, 0)));
+        playerController = FindObjectOfType<PlayerController>();
+        initRotation = playerController.transform.rotation.eulerAngles;
+        Debug.Log(initRotation);
         GameManager.I.RestartLevel(this);
     }
 
@@ -40,6 +46,9 @@ public class LevelManager : MonoBehaviour {
     {
         buildSequenceOfcommands();
         StartCoroutine(CheckLevelFailed());
+        UIController.I.restartButton.interactable = false;
+        UIController.I.backButton.interactable = false;
+
 
         if (programSpotsUsed > 0)
         {
@@ -55,8 +64,21 @@ public class LevelManager : MonoBehaviour {
                             commandsToExecute.Add(commandFunc);
                     }
                 }
-                if(commandsToExecute[i] != COMMAND.function)
-                    yield return new WaitForSeconds(.5f);
+
+                ColorBlock c = buttonsCommandsToExecute[i].colors;
+                c.disabledColor = new Color(c.disabledColor.r, c.disabledColor.g, c.disabledColor.b, 1);
+                buttonsCommandsToExecute[i].colors = c;
+
+                if (commandsToExecute[i] != COMMAND.function)
+                {
+                    yield return new WaitForSeconds(GameManager.I.stepDuration);
+                    playerController.resetAnimations();
+                    if (commandsToExecute[i] == COMMAND.jump || commandsToExecute[i] == COMMAND.checkPoint)
+                        yield return new WaitForSeconds(GameManager.I.stepDuration*2);
+
+                    c.disabledColor = new Color(c.disabledColor.r, c.disabledColor.g, c.disabledColor.b, .5f);
+                    buttonsCommandsToExecute[i].colors = c;
+                }
                 if (GameManager.I.levelCompleted)
                 {
                     yield break;
@@ -66,6 +88,9 @@ public class LevelManager : MonoBehaviour {
             SpawnPlayer();
             UIController.I.resetCheckPointCell();
             UIController.I.switchAllButtons(true);
+
+            UIController.I.restartButton.interactable = true;
+            UIController.I.backButton.interactable = true;
 
             StopCoroutine(CheckLevelFailed());
             StopCoroutine(GameManager.I.CheckNotRunningProgram());
@@ -80,7 +105,8 @@ public class LevelManager : MonoBehaviour {
             yield return null;
         }
         LevelFailed();
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(GameManager.I.stepDuration);
+
         UIController.I.levelFailedImage.gameObject.SetActive(false);
         playerController.isLevelFailed = false;
         GameManager.I.RestartLevel(this);
@@ -100,16 +126,16 @@ public class LevelManager : MonoBehaviour {
 
     public void SpawnPlayer()
     {
-        Instantiate(GameManager.I.player, new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f), Quaternion.Euler(new Vector3(0,140,0)));
-        playerController = FindObjectOfType<PlayerController>();
+        playerController.transform.rotation = Quaternion.Euler(initRotation);
+        playerController.transform.position = new Vector3(initialCell.cellPosX, initialCell.cellPosY, GameManager.I.zPlayerDisplacement);
         playerController.actualCell = initialCell;
-
         playerController.SetPlayerInitialTransition();
     }
 
     public void RestartLevelManager()
     {
         commandsToExecute = new List<COMMAND>();
+        buttonsCommandsToExecute = new List<Button>();
         previousCellChecked = null;
         SpawnPlayer();
     }
@@ -126,7 +152,7 @@ public class LevelManager : MonoBehaviour {
             {
                 checkpointsChecked++;
             }
-            UIController.I.setCheckPointCell(playerController.actualCell, levelClass);
+            StartCoroutine(delayToSetCheckpoint());
         }
         else
         {
@@ -163,29 +189,42 @@ public class LevelManager : MonoBehaviour {
             functionCommands = UIController.I.loopSpots;
 
         if (commandsToExecute.Count != 0) commandsToExecute.Clear();
+        if (buttonsCommandsToExecute.Count != 0) buttonsCommandsToExecute.Clear();
 
         for (int i = 0; i < programCommands.Length; i++)
         {
             COMMAND commandPr = programCommands[i].GetComponent<Command>().command;
+            Button buttonPr = programCommands[i].GetComponent<Button>();
+            Debug.Log(buttonPr.GetComponent<Command>().commandPosition);
+             
             if (commandPr != COMMAND.function)
             {
-                if (commandPr != COMMAND.none) 
+                if (commandPr != COMMAND.none)
+                {
                     commandsToExecute.Add(commandPr);
+                    buttonsCommandsToExecute.Add(buttonPr);
+                }
+                    
             }
             else if (commandPr == COMMAND.function)
             {
                 for (int j = 0; j < functionCommands.Length; j++)
                 {
                     COMMAND commandFunc = functionCommands[j].GetComponent<Command>().command;
+                    Button buttonFunc = functionCommands[j].GetComponent<Button>();
+
                     if (commandFunc != COMMAND.none)
+                    {
                         commandsToExecute.Add(commandFunc);
+                        buttonsCommandsToExecute.Add(buttonFunc);
+                    }
                 }
             }
         }
 
         for (int i = 0; i < commandsToExecute.Count; i++)
         {
-            Debug.Log(commandsToExecute[i].ToString() + ", pos = " + i.ToString());
+            //Debug.Log(commandsToExecute[i].ToString() + ", pos = " + i.ToString());
         }
     }
 
@@ -207,9 +246,16 @@ public class LevelManager : MonoBehaviour {
                 playerController.turnRight();
                 break;
             case COMMAND.checkPoint:
+                playerController.checkPoint();
                 checkPoint();
                 break;
           
         }
+    }
+
+    public IEnumerator delayToSetCheckpoint()
+    {
+        yield return new WaitForSeconds(GameManager.I.stepDuration);
+        UIController.I.setCheckPointCell(playerController.actualCell, levelClass);
     }
 }

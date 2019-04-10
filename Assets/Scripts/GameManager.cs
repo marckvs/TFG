@@ -22,6 +22,9 @@ public class GameManager : Singleton<GameManager>
 
     public GameObject player;
 
+    public float stepDuration;
+    public float zPlayerDisplacement;
+
     public void RestartLevel(LevelManager levelManager)
     {
         currentLevel = levelManager;

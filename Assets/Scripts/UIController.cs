@@ -70,6 +70,9 @@ public class UIController : Singleton<UIController> {
     public Image nextLevelImage;
     public Image levelFailedImage;
 
+    public Button restartButton;
+    public Button backButton;
+
     public int programButtonPressed = 0;
 
     public bool isAnyButtonPressed = false;
