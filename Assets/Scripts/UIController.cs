@@ -147,7 +147,7 @@ public class UIController : Singleton<UIController> {
             }
             else
             {
-                if (Mathf.Abs(Scroll.transform.localPosition.x) < Mathf.Abs(xPos + distanceBetweenLevelsUI - scrollVelocity))
+                if (Mathf.Abs(Scroll.transform.localPosition.x) < Mathf.Abs(xPos + distanceBetweenLevelsUI - scrollVelocity/2))
                 {
                     yield break;
                 }
