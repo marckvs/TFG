@@ -61,8 +61,14 @@ public class LevelManager : MonoBehaviour {
                     for (int j = 0; j < functionCommands.Length; j++)
                     {
                         COMMAND commandFunc = functionCommands[j].GetComponent<Command>().command;
+                        Button buttonFunc = functionCommands[j].GetComponent<Button>();
+
                         if (commandFunc != COMMAND.none)
+                        {
+                            buttonsCommandsToExecute.Add(buttonFunc);
                             commandsToExecute.Add(commandFunc);
+
+                        }
                     }
                 }
 

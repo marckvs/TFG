@@ -74,6 +74,9 @@ public class UIController : Singleton<UIController> {
     public Button backButton;
     public Button runButton;
 
+    public GameObject functionLayout;
+    public GameObject loopLayout;
+
     public int programButtonPressed = 0;
 
     public bool isAnyButtonPressed = false;
@@ -410,7 +413,6 @@ public class UIController : Singleton<UIController> {
             addMovementButtonToProgram(loopSpots, levelManager.loopSpotsUsed, gO);
             levelManager.loopSpotsUsed++;          
         }
-        Debug.Log(levelManager.loopSpotsUsed);
     }
 
     #endregion
@@ -687,8 +689,8 @@ public class UIController : Singleton<UIController> {
             if (parent) programSpots[i].transform.SetParent(DisabledButtonsMainProgram.transform);
             if (i < functionSpots.Length && parent)
             {
-                if (isLoopLevel) loopSpots[i].transform.SetParent(LoopProgram.transform);
-                if (isFunctionLevel) functionSpots[i].transform.SetParent(FunctionProgram.transform);
+                if (isLoopLevel) loopSpots[i].transform.SetParent(loopLayout.transform);
+                if (isFunctionLevel) functionSpots[i].transform.SetParent(functionLayout.transform);
             }
         }
     }
