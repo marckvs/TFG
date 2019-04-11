@@ -510,7 +510,7 @@ public class UIController : Singleton<UIController> {
     }
     #endregion
 
-    #region commandsController
+#region commandsController
 
     private void setCommands()
     {
@@ -591,6 +591,9 @@ public class UIController : Singleton<UIController> {
         restartProgramUI(programSpots, false);
         if(isFunctionLevel) restartProgramUI(functionSpots, false);
         if (isLoopLevel) restartProgramUI(loopSpots, true);
+
+        backButton.interactable = true;
+        restartButton.interactable = true;
 
         resetCheckPointCell();
 
