@@ -48,6 +48,7 @@ public class LevelManager : MonoBehaviour {
         StartCoroutine(CheckLevelFailed());
         UIController.I.restartButton.interactable = false;
         UIController.I.backButton.interactable = false;
+        UIController.I.runButton.interactable = false;
 
 
         if (programSpotsUsed > 0)
@@ -91,6 +92,7 @@ public class LevelManager : MonoBehaviour {
 
             UIController.I.restartButton.interactable = true;
             UIController.I.backButton.interactable = true;
+            UIController.I.runButton.interactable = true;
 
             StopCoroutine(CheckLevelFailed());
             StopCoroutine(GameManager.I.CheckNotRunningProgram());

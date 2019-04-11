@@ -72,6 +72,7 @@ public class UIController : Singleton<UIController> {
 
     public Button restartButton;
     public Button backButton;
+    public Button runButton;
 
     public int programButtonPressed = 0;
 
@@ -594,6 +595,7 @@ public class UIController : Singleton<UIController> {
 
         backButton.interactable = true;
         restartButton.interactable = true;
+        runButton.interactable = true;
 
         resetCheckPointCell();
 
