@@ -76,6 +76,9 @@ public class UIController : Singleton<UIController> {
 
     public GameObject functionLayout;
     public GameObject loopLayout;
+    public GameObject mainProgramLayout1;
+    public GameObject mainProgramLayout2;
+
 
     public int programButtonPressed = 0;
 
@@ -129,7 +132,6 @@ public class UIController : Singleton<UIController> {
 
     public void OnNextLevelsMenuButtonPressed(bool next)
     {
-        Debug.Log("in");
         if(next)
             StartCoroutine(ScrollLevelMenu(true));
         else
@@ -244,11 +246,13 @@ public class UIController : Singleton<UIController> {
 
         isAnyButtonPressed = false;
 
-        changeAlpha(1, functionImage);
-        functionImage.GetComponent<Button>().interactable = true;
+        Debug.Log(isFunctionLevel);
 
         if (isFunctionLevel)
         {
+            changeAlpha(1, functionImage);
+            functionImage.GetComponent<Button>().interactable = true;
+
             isFunctionProgramButtonPressed = false;
             changeAlpha(0.6f, FunctionProgram);
 
@@ -260,6 +264,9 @@ public class UIController : Singleton<UIController> {
 
         if (isLoopLevel)
         {
+            changeAlpha(1, functionImage);
+            functionImage.GetComponent<Button>().interactable = true;
+
             isLoopProgramButtonPressed = false;
             changeAlpha(0.6f, LoopProgram);
 
@@ -541,9 +548,17 @@ public class UIController : Singleton<UIController> {
     {
         for (int i = n; i < commands.Length; i++)
         {
-            commands[i].gameObject.SetActive(b);
+            if (b == true)
+            {
+                changeAlpha(1f, commands[i].gameObject.GetComponent<Image>());
+                commands[i].GetComponent<Button>().interactable = true;
+            }
+            else
+            {
+                commands[i].GetComponent<Button>().interactable = false;
+                changeAlpha(0f, commands[i].gameObject.GetComponent<Image>());
+            }
         }
-
     }
     #endregion
 
@@ -631,12 +646,7 @@ public class UIController : Singleton<UIController> {
         
     }
 
-    private void changeAlpha(float alpha, Image image)
-    {
-        Color color = image.color;
-        color.a = alpha;
-        image.color = color;
-    }
+   
 
     private void resetDeleteButtons()
     {
@@ -656,6 +666,13 @@ public class UIController : Singleton<UIController> {
             array[i].transform.GetChild(0).gameObject.SetActive(false);
             array[i].GetComponent<Button>().interactable = true;
         }
+    }
+
+    private void changeAlpha(float alpha, Image image)
+    {
+        Color color = image.color;
+        color.a = alpha;
+        image.color = color;
     }
 
     private void changeArrayAlpha(Image[] array, int sizeToChange, int alphavalue)
@@ -697,29 +714,37 @@ public class UIController : Singleton<UIController> {
 
     private void switchFunctionButtons(bool interactable, bool parent)
     {
+        Debug.Log("interactable");
         for (int i = 0; i < programSpots.Length; i++)
         {
             if (i < functionSpots.Length)
             {
                 functionSpots[i].GetComponent<Button>().interactable = interactable;
+                Debug.Log(interactable);
                 if (parent)functionSpots[i].transform.SetParent(DisabledButtonsFunctionProgram.transform);
             }
-            programSpots[i].transform.SetParent(MainProgram.transform);
+            if(i<programSpots.Length/2)
+                programSpots[i].transform.SetParent(mainProgramLayout1.transform);
+            else
+                programSpots[i].transform.SetParent(mainProgramLayout2.transform);
+
         }
 
     }
 
     private void switchLoopButtons(bool interactable, bool parent)
     {
-        for (int i = 0; i < programSpots.Length - 1; i++)
+        for (int i = 0; i < programSpots.Length; i++)
         {
             if (i < loopSpots.Length)
             {
-                if(i != loopSpots.Length - 1)
-                    loopSpots[i].GetComponent<Button>().interactable = interactable;
+               loopSpots[i].GetComponent<Button>().interactable = interactable;
                if(parent) loopSpots[i].transform.SetParent(DisabledButtonsLoopProgram.transform);
             }
-            programSpots[i].transform.SetParent(MainProgram.transform);
+            if (i < programSpots.Length / 2)
+                programSpots[i].transform.SetParent(mainProgramLayout1.transform);
+            else
+                programSpots[i].transform.SetParent(mainProgramLayout2.transform);
         }
     }
 
