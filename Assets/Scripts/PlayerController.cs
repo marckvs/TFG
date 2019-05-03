@@ -7,6 +7,7 @@ using DG.Tweening;
 public class PlayerController : MonoBehaviour {
     [HideInInspector]
 
+    public Vector3 initialPosition;
     public Animator animator;
     public Transform tr;
     public Cell actualCell;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour {
     {
         tr = gameObject.GetComponent<Transform>();
         animator = gameObject.GetComponent<Animator>();
+        initialPosition = tr.position;
     }
 
     public void Move(COMMAND c)
@@ -43,11 +45,13 @@ public class PlayerController : MonoBehaviour {
             {
                 animator.SetBool("is_in_air", true);
                 tr.DOJump(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zPlayerDisplacement), .6f, 1, GameManager.I.stepDuration).SetEase(Ease.InSine);
+
             }
             else
             {
                 animator.SetBool("run", true);
-                tr.DOMove(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zPlayerDisplacement), GameManager.I.stepDuration)/*.SetEase(Ease.InOutQuint)*/;
+                tr.DOMove(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zPlayerDisplacement), GameManager.I.stepDuration);
+
             }
         }
     }
@@ -86,11 +90,14 @@ public class PlayerController : MonoBehaviour {
     public void SetPlayerInitialTransition()
     {
         idActualTransition = (int) TRANSITIONDIRECTION.forward;
-        actualTransition = actualCell.TransitionsFromCell[idActualTransition];
+        resetAnimations();
+        if(actualCell != null)
+            actualTransition = actualCell.TransitionsFromCell[idActualTransition];
     }
 
     public void resetAnimations()
     {
+        DOTween.Kill(this.gameObject);
         animator.SetBool("checkpoint", false);
         animator.SetBool("run", false);
         animator.SetBool("is_in_air", false);

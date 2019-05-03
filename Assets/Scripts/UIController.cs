@@ -111,6 +111,7 @@ public class UIController : Singleton<UIController> {
 
         functionSpots = new Image[6];
         functionSpots[0] = functionSpot1;
+        functionSpots[0] = functionSpot1;
         functionSpots[1] = functionSpot2;
         functionSpots[2] = functionSpot3;
         functionSpots[3] = functionSpot4;
@@ -126,6 +127,11 @@ public class UIController : Singleton<UIController> {
         loopSpots[5] = loopSpot6;
         loopSpots[6] = loopSpot7;
         #endregion
+    }
+
+    private void Start()
+    {
+        
     }
 
     #region MainMenuUI
@@ -235,6 +241,9 @@ public class UIController : Singleton<UIController> {
             FunctionBackImage.SetActive(true);
 
         }
+
+        mainProgramLayout1.GetComponent<HorizontalLayoutGroup>().childControlWidth = false;
+        mainProgramLayout2.GetComponent<HorizontalLayoutGroup>().childControlWidth = false;
 
         OnMainProgramSelected();
     }
@@ -361,8 +370,9 @@ public class UIController : Singleton<UIController> {
     {
         if (isDeleteActivated) resetDeleteButtons();
 
-        switchAllButtons(false);
-
+        if(levelManager.programSpotsUsed > 0)
+            switchAllButtons(false);
+    
         GameManager.I.runningProgram = true;
     }
 
@@ -370,6 +380,8 @@ public class UIController : Singleton<UIController> {
     {
         if (spotsUsed < array.Length)
         {
+            runButton.interactable = true;
+
             if (!isAnyButtonPressed || programButtonPressed == spotsUsed - 1)
             {
                 changeAlpha(1, array[spotsUsed]);
@@ -488,6 +500,7 @@ public class UIController : Singleton<UIController> {
 
         else if (isFunctionProgramButtonPressed)
         {
+            functionLayout.GetComponent<HorizontalLayoutGroup>().childControlWidth = false;
             deleteCommand(functionSpots, levelManager.functionSpotsUsed);
             levelManager.functionSpotsUsed--;
         }
@@ -496,13 +509,17 @@ public class UIController : Singleton<UIController> {
         {
             if (levelManager.loopSpotsUsed < loopSpots.Length)
             {
+                loopLayout.GetComponent<HorizontalLayoutGroup>().childControlWidth = false;
                 deleteCommand(loopSpots, levelManager.loopSpotsUsed);
+                Debug.Log(levelManager.loopSpotsUsed);
                 levelManager.loopSpotsUsed--;
             }
         }
 
-        Debug.Log(levelManager.loopSpotsUsed);
-
+        if(levelManager.programSpotsUsed == 0)
+        {
+            runButton.interactable = false;
+        }
         if (isDeleteActivated) resetDeleteButtons();
     }
 
@@ -612,7 +629,7 @@ public class UIController : Singleton<UIController> {
 
         backButton.interactable = true;
         restartButton.interactable = true;
-        runButton.interactable = true;
+        runButton.interactable = false;
 
         resetCheckPointCell();
 

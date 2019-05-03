@@ -41,10 +41,14 @@ public class GameManager : Singleton<GameManager>
         StopAllCoroutines();
         currentLevel.RestartLevelManager();
         InitCoroutines();
+
     }
 
     public IEnumerator CheckNotRunningProgram()
     {
+        yield return new WaitForSeconds(stepDuration);
+        currentLevel.waitStepDuration();
+
         runningProgram = false;
         while (!runningProgram)
         {

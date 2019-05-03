@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 [DisallowMultipleComponent]
 public class LevelManager : MonoBehaviour {
@@ -46,13 +47,14 @@ public class LevelManager : MonoBehaviour {
     {
         buildSequenceOfcommands();
         StartCoroutine(CheckLevelFailed());
-        UIController.I.restartButton.interactable = false;
-        UIController.I.backButton.interactable = false;
-        UIController.I.runButton.interactable = false;
-
-
+        
+        Debug.Log(programSpotsUsed);
         if (programSpotsUsed > 0)
         {
+            //UIController.I.restartButton.interactable = false;
+            UIController.I.backButton.interactable = false;
+            UIController.I.runButton.interactable = false;
+
             for (int i = 0; i < commandsToExecute.Count; i++)
             {
                 commandToAction(commandsToExecute[i]);
@@ -90,19 +92,19 @@ public class LevelManager : MonoBehaviour {
                 {
                     yield break;
                 }
+
             }
 
             SpawnPlayer();
             UIController.I.resetCheckPointCell();
             UIController.I.switchAllButtons(true);
 
-            UIController.I.restartButton.interactable = true;
             UIController.I.backButton.interactable = true;
             UIController.I.runButton.interactable = true;
 
             StopCoroutine(CheckLevelFailed());
             StopCoroutine(GameManager.I.CheckNotRunningProgram());
-            StartCoroutine(GameManager.I.CheckNotRunningProgram());         
+            StartCoroutine(GameManager.I.CheckNotRunningProgram());
         }
     }
 
@@ -134,10 +136,10 @@ public class LevelManager : MonoBehaviour {
 
     public void SpawnPlayer()
     {
-        playerController.transform.rotation = Quaternion.Euler(initRotation);
-        playerController.transform.position = new Vector3(initialCell.cellPosX, initialCell.cellPosY, GameManager.I.zPlayerDisplacement);
         playerController.actualCell = initialCell;
         playerController.SetPlayerInitialTransition();
+        playerController.transform.rotation = Quaternion.Euler(initRotation);
+        playerController.transform.position = new Vector3(initialCell.cellPosX, initialCell.cellPosY, GameManager.I.zPlayerDisplacement);
     }
 
     public void RestartLevelManager()
@@ -258,6 +260,15 @@ public class LevelManager : MonoBehaviour {
                 checkPoint();
                 break;
           
+        }
+    }
+
+    public void waitStepDuration()
+    {
+        if(playerController.initialPosition != playerController.transform.position)
+        {
+            SpawnPlayer();
+           
         }
     }
 

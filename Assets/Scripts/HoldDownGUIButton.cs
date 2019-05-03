@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class HoldDownGUIButton : UIBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
 {
 
-    public float durationThreshold = 1.0f;
+    private float durationThreshold = .5f;
 
     public UnityEvent onLongPress = new UnityEvent();
 
