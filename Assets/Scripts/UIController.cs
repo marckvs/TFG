@@ -15,6 +15,8 @@ public class UIController : Singleton<UIController> {
 
     public GameObject Scroll;
 
+    public Image changeSceneImage;
+
     public GameObject DisabledButtonsMainProgram;
     public GameObject DisabledButtonsFunctionProgram;
     public GameObject DisabledButtonsLoopProgram;
@@ -183,9 +185,32 @@ public class UIController : Singleton<UIController> {
 
     public void OnSelectLevelButtonPressed(int buildIndex)
     {
+        changeSceneImage.gameObject.SetActive(true);
+        StartCoroutine(FadeImage(true));
+        SceneManager.LoadScene(buildIndex);
         LevelMenuScreen.SetActive(false);
         InGameMenu.SetActive(true);
-        SceneManager.LoadScene(buildIndex);
+    }
+
+    IEnumerator FadeImage(bool fadeAway)
+    {
+        if (fadeAway)
+        {
+            for (float i = 1; i >= 0; i -= Time.deltaTime)
+            {
+                changeSceneImage.color = new Color(1, 1, 1, i);
+                yield return null;
+            }
+        }
+        else
+        {
+            for (float i = 0; i <= 1; i += Time.deltaTime)
+            {
+                changeSceneImage.color = new Color(1, 1, 1, i);
+                yield return null;
+            }
+        }
+        changeSceneImage.gameObject.SetActive(false);
     }
 
     public void OnMenuBackButtonPressed()
@@ -346,8 +371,18 @@ public class UIController : Singleton<UIController> {
 
     public void OnNextLevelButtonPressed()
     {
+        changeSceneImage.gameObject.SetActive(true);
+        StartCoroutine(FadeImage(true));
+
         nextLevelButton.gameObject.SetActive(false);
         nextLevelImage.gameObject.SetActive(false);
+
+        if ((int)levelManager.level == 10)
+        {
+            InGameMenu.SetActive(false);
+            LevelMenuScreen.SetActive(true);
+        }
+        
         SceneManager.LoadScene((int)levelManager.level + 1);
         checkReferenceLevelManager();
         GameManager.I.RestartLevel(levelManager);
