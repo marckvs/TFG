@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 [DisallowMultipleComponent]
 public class UIController : Singleton<UIController> {
@@ -67,7 +69,6 @@ public class UIController : Singleton<UIController> {
     public Image loopSpot6;
     public Image loopSpot7;
 
-
     public Button nextLevelButton;
     public Image nextLevelImage;
     public Image levelFailedImage;
@@ -95,6 +96,8 @@ public class UIController : Singleton<UIController> {
     public Image[] functionSpots;
     [HideInInspector]
     public Image[] loopSpots;
+
+    public Button[] levels;
     [HideInInspector]
     public PlayerController playerController;
 
@@ -128,14 +131,16 @@ public class UIController : Singleton<UIController> {
         loopSpots[4] = loopSpot5;
         loopSpots[5] = loopSpot6;
         loopSpots[6] = loopSpot7;
+
         #endregion
     }
 
     private void Start()
     {
-        
+        GameManager.I.numPassedLevels = 1;
+        Load();
+        disableUnpassedLevels();
     }
-
     #region MainMenuUI
 
     public void OnNextLevelsMenuButtonPressed(bool next)
@@ -381,12 +386,31 @@ public class UIController : Singleton<UIController> {
         {
             InGameMenu.SetActive(false);
             LevelMenuScreen.SetActive(true);
+            return;
         }
-        
+
+        levels[GameManager.I.numPassedLevels].interactable = true;
+
+        for (int i = 0; i < levels[GameManager.I.numPassedLevels].transform.childCount; i++)
+        {
+            if(levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.activeSelf == false)
+            {
+                levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.SetActive(true);
+            }
+            else
+            {
+                levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
+
+        GameManager.I.numPassedLevels++;
+        Save();
+
         SceneManager.LoadScene((int)levelManager.level + 1);
         checkReferenceLevelManager();
         GameManager.I.RestartLevel(levelManager);
     }
+
     public void OnRestartButtonPressed()
     {
         if (isDeleteActivated) resetDeleteButtons();
@@ -816,6 +840,48 @@ public class UIController : Singleton<UIController> {
         }
     }
 
-    
+    private void disableUnpassedLevels()
+    {
+        for (int i = GameManager.I.numPassedLevels; i < levels.Length; i++)
+        {
+            levels[i].interactable = false;
+            
+        }
+        for (int i = 0; i < GameManager.I.numPassedLevels; i++)
+        {
+            for (int j = 0; j < levels[i].transform.childCount; j++)
+            {
+                if (levels[i].transform.GetChild(j).gameObject.activeSelf == false)
+                {
+                    levels[i].transform.GetChild(j).gameObject.SetActive(true);
+                }
+                else
+                {
+                    levels[i].transform.GetChild(j).gameObject.SetActive(false);
+                }
+            }
+        }
+        
+    }
+
+    private void Save()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/levelsPassed.dat");
+        bf.Serialize(file, GameManager.I.numPassedLevels);
+        file.Close();
+    }
+
+    private void Load()
+    {
+        if (File.Exists(Application.persistentDataPath + "/levelsPassed.dat"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/levelsPassed.dat", FileMode.Open);
+            GameManager.I.numPassedLevels = (int)bf.Deserialize(file);
+            file.Close();
+        }
+    }
+
 
 }
