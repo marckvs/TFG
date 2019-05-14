@@ -31,7 +31,7 @@ public class LevelManager : MonoBehaviour {
     private List<COMMAND> commandsToExecute;
     private List<Button> buttonsCommandsToExecute;
 
-    private PlayerController playerController;
+    private PlayerController characterController;
     private Vector3 initRotation;
 
     void Awake()
@@ -39,8 +39,8 @@ public class LevelManager : MonoBehaviour {
         cells = FindObjectsOfType<Cell>();
         SetCells();
         Instantiate(GameManager.I.player, new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f), Quaternion.Euler(new Vector3(0, 140, 0)));
-        playerController = FindObjectOfType<PlayerController>();
-        initRotation = playerController.transform.rotation.eulerAngles;
+        characterController = FindObjectOfType<PlayerController>();
+        initRotation = characterController.transform.rotation.eulerAngles;
         GameManager.I.RestartLevel(this);
     }
 
@@ -74,12 +74,13 @@ public class LevelManager : MonoBehaviour {
                 }
 
                 ColorBlock c = buttonsCommandsToExecute[i].colors;
-                setDisableColorDuringRuntime(c, i);
+                c.disabledColor = new Color(c.disabledColor.r, c.disabledColor.g, c.disabledColor.b, 1);
+                buttonsCommandsToExecute[i].colors = c;
 
                 if (commandsToExecute[i] != COMMAND.function)
                 {
                     yield return new WaitForSeconds(GameManager.I.stepDuration);
-                    playerController.resetAnimations();
+                    characterController.resetAnimations();
                     if (commandsToExecute[i] == COMMAND.jump || commandsToExecute[i] == COMMAND.checkPoint)
                         yield return new WaitForSeconds(GameManager.I.stepDuration*2);
 
@@ -106,15 +107,9 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    private void setDisableColorDuringRuntime(ColorBlock c, int i)
-    {
-        c.disabledColor = new Color(c.disabledColor.r, c.disabledColor.g, c.disabledColor.b, 1);
-        buttonsCommandsToExecute[i].colors = c;
-    }
-
     public IEnumerator CheckLevelFailed()
     {
-        while (!playerController.isLevelFailed)
+        while (!characterController.isLevelFailed)
         {
             yield return null;
         }
@@ -122,7 +117,7 @@ public class LevelManager : MonoBehaviour {
         yield return new WaitForSeconds(GameManager.I.stepDuration);
 
         UIController.I.levelFailedImage.gameObject.SetActive(false);
-        playerController.isLevelFailed = false;
+        characterController.isLevelFailed = false;
         GameManager.I.RestartLevel(this);
     }
 
@@ -140,10 +135,10 @@ public class LevelManager : MonoBehaviour {
 
     public void SpawnPlayer()
     {
-        playerController.actualCell = initialCell;
-        playerController.SetPlayerInitialTransition();
-        playerController.transform.rotation = Quaternion.Euler(initRotation);
-        playerController.transform.position = new Vector3(initialCell.cellPosX, initialCell.cellPosY, GameManager.I.zPlayerDisplacement);
+        characterController.actualCell = initialCell;
+        characterController.SetPlayerInitialTransition();
+        characterController.transform.rotation = Quaternion.Euler(initRotation);
+        characterController.transform.position = new Vector3(initialCell.cellPosX, initialCell.cellPosY, GameManager.I.zPlayerDisplacement);
     }
 
     public void RestartLevelManager()
@@ -156,13 +151,13 @@ public class LevelManager : MonoBehaviour {
 
     private void checkPoint()
     {
-        if (playerController.actualCell.isCheckpoint)
+        if (characterController.actualCell.isCheckpoint)
         {
             if (previousCellChecked == null)
             {
                 checkpointsChecked++;
             }
-            else if (previousCellChecked != playerController.actualCell)
+            else if (previousCellChecked != characterController.actualCell)
             {
                 checkpointsChecked++;
             }
@@ -171,10 +166,10 @@ public class LevelManager : MonoBehaviour {
         else
         {
             Debug.LogError("you missed checkpoint");
-            playerController.isLevelFailed = true;
+            characterController.isLevelFailed = true;
         }
 
-        previousCellChecked = playerController.actualCell;
+        previousCellChecked = characterController.actualCell;
 
         if (checkpointsChecked == nCheckpoints)
         {
@@ -241,19 +236,19 @@ public class LevelManager : MonoBehaviour {
         switch (command)
         {
             case COMMAND.walk:
-                playerController.Move(COMMAND.walk);
+                characterController.Move(COMMAND.walk);
                 break;
             case COMMAND.jump:
-                playerController.Move(COMMAND.jump);
+                characterController.Move(COMMAND.jump);
                 break;
             case COMMAND.turnLeft:
-                playerController.turnLeft();
+                characterController.turnLeft();
                 break;
             case COMMAND.turnRight:
-                playerController.turnRight();
+                characterController.turnRight();
                 break;
             case COMMAND.checkPoint:
-                playerController.checkPoint();
+                characterController.checkPoint();
                 checkPoint();
                 break;     
         }
@@ -261,7 +256,7 @@ public class LevelManager : MonoBehaviour {
 
     public void waitStepDuration()
     {
-        if(playerController.initialPosition != playerController.transform.position)
+        if(characterController.initialPosition != characterController.transform.position)
         {
             SpawnPlayer();
            
@@ -271,6 +266,6 @@ public class LevelManager : MonoBehaviour {
     public IEnumerator delayToSetCheckpoint()
     {
         yield return new WaitForSeconds(GameManager.I.stepDuration);
-        UIController.I.setCheckPointCell(playerController.actualCell, levelClass);
+        UIController.I.setCheckPointCell(characterController.actualCell, levelClass);
     }
 }
