@@ -36,4 +36,12 @@ public class Tutorial : MonoBehaviour {
             images[indexActiveSprite].gameObject.SetActive(true);
         
     }
+
+    public void ActivateTutorial()
+    {
+        indexActiveSprite = 0;
+        images[indexActiveSprite].gameObject.SetActive(true);
+        background.gameObject.SetActive(true);
+        button.gameObject.SetActive(true);
+    }
 }

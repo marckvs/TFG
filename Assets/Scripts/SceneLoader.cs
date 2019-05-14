@@ -10,7 +10,6 @@ public class SceneLoader : Singleton<SceneLoader>
     {
         Loader = 0,
         Menu = 1,
-        Level1 = 2
     }
 
     public SCENES CurrentScene { get; private set; }

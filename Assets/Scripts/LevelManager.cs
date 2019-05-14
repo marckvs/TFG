@@ -20,11 +20,13 @@ public class LevelManager : MonoBehaviour {
     public int nCheckpoints = 0;
     public int checkpointsChecked = 0;
 
+    public GameObject instructions;
+
     public LEVELCLASS levelClass;
     public LEVEL level;
 
     private Image[] programCommands;
-    private Image[] functionCommands;
+    private Image[] subProgramCommands;
 
     private List<COMMAND> commandsToExecute;
     private List<Button> buttonsCommandsToExecute;
@@ -39,7 +41,6 @@ public class LevelManager : MonoBehaviour {
         Instantiate(GameManager.I.player, new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f), Quaternion.Euler(new Vector3(0, 140, 0)));
         playerController = FindObjectOfType<PlayerController>();
         initRotation = playerController.transform.rotation.eulerAngles;
-        Debug.Log(initRotation);
         GameManager.I.RestartLevel(this);
     }
 
@@ -48,35 +49,32 @@ public class LevelManager : MonoBehaviour {
         buildSequenceOfcommands();
         StartCoroutine(CheckLevelFailed());
         
-        Debug.Log(programSpotsUsed);
         if (programSpotsUsed > 0)
         {
-            //UIController.I.restartButton.interactable = false;
             UIController.I.backButton.interactable = false;
             UIController.I.runButton.interactable = false;
 
             for (int i = 0; i < commandsToExecute.Count; i++)
             {
                 commandToAction(commandsToExecute[i]);
+
                 if (i == commandsToExecute.Count - 1 && commandsToExecute[commandsToExecute.Count - 1] == COMMAND.function)
                 {
-                    for (int j = 0; j < functionCommands.Length; j++)
+                    for (int j = 0; j < subProgramCommands.Length; j++)
                     {
-                        COMMAND commandFunc = functionCommands[j].GetComponent<Command>().command;
-                        Button buttonFunc = functionCommands[j].GetComponent<Button>();
+                        COMMAND commandFunc = subProgramCommands[j].GetComponent<Command>().command;
+                        Button buttonFunc = subProgramCommands[j].GetComponent<Button>();
 
                         if (commandFunc != COMMAND.none)
                         {
                             buttonsCommandsToExecute.Add(buttonFunc);
                             commandsToExecute.Add(commandFunc);
-
                         }
                     }
                 }
 
                 ColorBlock c = buttonsCommandsToExecute[i].colors;
-                c.disabledColor = new Color(c.disabledColor.r, c.disabledColor.g, c.disabledColor.b, 1);
-                buttonsCommandsToExecute[i].colors = c;
+                setDisableColorDuringRuntime(c, i);
 
                 if (commandsToExecute[i] != COMMAND.function)
                 {
@@ -106,6 +104,12 @@ public class LevelManager : MonoBehaviour {
             StopCoroutine(GameManager.I.CheckNotRunningProgram());
             StartCoroutine(GameManager.I.CheckNotRunningProgram());
         }
+    }
+
+    private void setDisableColorDuringRuntime(ColorBlock c, int i)
+    {
+        c.disabledColor = new Color(c.disabledColor.r, c.disabledColor.g, c.disabledColor.b, 1);
+        buttonsCommandsToExecute[i].colors = c;
     }
 
     public IEnumerator CheckLevelFailed()
@@ -193,10 +197,11 @@ public class LevelManager : MonoBehaviour {
     private void buildSequenceOfcommands()
     {
         programCommands = UIController.I.programSpots;
+
         if(UIController.I.isFunctionLevel)
-            functionCommands = UIController.I.functionSpots;
+            subProgramCommands = UIController.I.functionSpots;
         if(UIController.I.isLoopLevel)
-            functionCommands = UIController.I.loopSpots;
+            subProgramCommands = UIController.I.loopSpots;
 
         if (commandsToExecute.Count != 0) commandsToExecute.Clear();
         if (buttonsCommandsToExecute.Count != 0) buttonsCommandsToExecute.Clear();
@@ -205,7 +210,6 @@ public class LevelManager : MonoBehaviour {
         {
             COMMAND commandPr = programCommands[i].GetComponent<Command>().command;
             Button buttonPr = programCommands[i].GetComponent<Button>();
-            Debug.Log(buttonPr.GetComponent<Command>().commandPosition);
              
             if (commandPr != COMMAND.function)
             {
@@ -213,15 +217,14 @@ public class LevelManager : MonoBehaviour {
                 {
                     commandsToExecute.Add(commandPr);
                     buttonsCommandsToExecute.Add(buttonPr);
-                }
-                    
+                }              
             }
             else if (commandPr == COMMAND.function)
             {
-                for (int j = 0; j < functionCommands.Length; j++)
+                for (int j = 0; j < subProgramCommands.Length; j++)
                 {
-                    COMMAND commandFunc = functionCommands[j].GetComponent<Command>().command;
-                    Button buttonFunc = functionCommands[j].GetComponent<Button>();
+                    COMMAND commandFunc = subProgramCommands[j].GetComponent<Command>().command;
+                    Button buttonFunc = subProgramCommands[j].GetComponent<Button>();
 
                     if (commandFunc != COMMAND.none)
                     {
@@ -231,16 +234,10 @@ public class LevelManager : MonoBehaviour {
                 }
             }
         }
-
-        for (int i = 0; i < commandsToExecute.Count; i++)
-        {
-            //Debug.Log(commandsToExecute[i].ToString() + ", pos = " + i.ToString());
-        }
     }
 
     private void commandToAction(COMMAND command)
     {
-        Debug.Log(command.ToString());
         switch (command)
         {
             case COMMAND.walk:
@@ -258,8 +255,7 @@ public class LevelManager : MonoBehaviour {
             case COMMAND.checkPoint:
                 playerController.checkPoint();
                 checkPoint();
-                break;
-          
+                break;     
         }
     }
 

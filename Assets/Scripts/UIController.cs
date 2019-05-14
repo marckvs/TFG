@@ -139,6 +139,7 @@ public class UIController : Singleton<UIController> {
     {
         GameManager.I.numPassedLevels = 1;
         Load();
+        Debug.Log("numpassed" + GameManager.I.numPassedLevels);
         disableUnpassedLevels();
     }
     #region MainMenuUI
@@ -374,6 +375,14 @@ public class UIController : Singleton<UIController> {
         nextLevelImage.gameObject.SetActive(true);
     }
 
+    public void OnInstructionsButtonsPressed()
+    {
+        if(levelManager.instructions != null)
+        {
+            levelManager.instructions.GetComponent<Tutorial>().ActivateTutorial();
+        }
+    }
+
     public void OnNextLevelButtonPressed()
     {
         changeSceneImage.gameObject.SetActive(true);
@@ -382,7 +391,7 @@ public class UIController : Singleton<UIController> {
         nextLevelButton.gameObject.SetActive(false);
         nextLevelImage.gameObject.SetActive(false);
 
-        if ((int)levelManager.level == 10)
+        if ((int)levelManager.level == GameManager.I.numLevels+1)
         {
             InGameMenu.SetActive(false);
             LevelMenuScreen.SetActive(true);
@@ -402,8 +411,11 @@ public class UIController : Singleton<UIController> {
                 levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.SetActive(false);
             }
         }
-
-        GameManager.I.numPassedLevels++;
+        Debug.Log((int)GameManager.I.currentLevel.level + ", " + GameManager.I.numPassedLevels);
+        if ((int)GameManager.I.currentLevel.level > GameManager.I.numPassedLevels+1)
+        {
+            GameManager.I.numPassedLevels++;
+        }
         Save();
 
         SceneManager.LoadScene((int)levelManager.level + 1);
