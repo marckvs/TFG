@@ -28,13 +28,11 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             {
                 return null;
             }
-
             lock (_lock)
             {
                 if (_instance == null)
                 {
                     _instance = (T)FindObjectOfType(typeof(T));
-
 
                     if (FindObjectsOfType(typeof(T)).Length > 1)
                     {
@@ -50,7 +48,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                         DontDestroyOnLoad(singleton);
                     }
                 }
-
                 return _instance;
             }
         }
