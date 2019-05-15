@@ -39,7 +39,8 @@ public class LevelManager : MonoBehaviour {
         cells = FindObjectsOfType<Cell>();
         SetCells();
 
-        Instantiate(GameManager.I.character, new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f), Quaternion.Euler(new Vector3(0, 140, 0)));
+        Instantiate(GameManager.I.character, new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f), 
+            Quaternion.Euler(new Vector3(0, 140, 0)));
         characterController = FindObjectOfType<CharacterController>();
         initRotation = characterController.transform.rotation.eulerAngles;
 
