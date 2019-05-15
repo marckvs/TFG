@@ -28,25 +28,6 @@ public class GameManager : Singleton<GameManager>
     public int numPassedLevels;
     public int numLevels = 11;
 
-    public void RestartLevel(LevelManager levelManager)
-    {
-        currentLevel = levelManager;
-        levelCompleted = false;
-        runningProgram = false;
-        currentLevel.programSpotsUsed = 0;
-        currentLevel.functionSpotsUsed = 0;
-        currentLevel.loopSpotsUsed = 0;
-
-        UIController.I.ProgramController();
-        UIController.I.RestartUI();
-
-        currentLevel.StopAllCoroutines();
-        StopAllCoroutines();
-        currentLevel.RestartLevelManager();
-        InitCoroutines();
-
-    }
-
     public IEnumerator CheckNotRunningProgram()
     {
         yield return new WaitForSeconds(stepDuration);
@@ -74,5 +55,24 @@ public class GameManager : Singleton<GameManager>
     {
         StartCoroutine(CheckNotRunningProgram());
         StartCoroutine(CheckLevelCompleted());
+    }
+
+    public void RestartLevel(LevelManager levelManager)
+    {
+        currentLevel = levelManager;
+        levelCompleted = false;
+        runningProgram = false;
+        currentLevel.programSpotsUsed = 0;
+        currentLevel.functionSpotsUsed = 0;
+        currentLevel.loopSpotsUsed = 0;
+
+        UIController.I.ProgramController();
+        UIController.I.RestartUI();
+
+        currentLevel.StopAllCoroutines();
+        StopAllCoroutines();
+        currentLevel.RestartLevelManager();
+        InitCoroutines();
+
     }
 }
