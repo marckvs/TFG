@@ -31,16 +31,18 @@ public class LevelManager : MonoBehaviour {
     private List<COMMAND> commandsToExecute;
     private List<Button> buttonsCommandsToExecute;
 
-    private PlayerController characterController;
+    private CharacterController characterController;
     private Vector3 initRotation;
 
     void Awake()
     {
         cells = FindObjectsOfType<Cell>();
         SetCells();
-        Instantiate(GameManager.I.player, new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f), Quaternion.Euler(new Vector3(0, 140, 0)));
-        characterController = FindObjectOfType<PlayerController>();
+
+        Instantiate(GameManager.I.character, new Vector3(initialCell.cellPosX, initialCell.cellPosY, 0f), Quaternion.Euler(new Vector3(0, 140, 0)));
+        characterController = FindObjectOfType<CharacterController>();
         initRotation = characterController.transform.rotation.eulerAngles;
+
         GameManager.I.RestartLevel(this);
     }
 
@@ -94,7 +96,7 @@ public class LevelManager : MonoBehaviour {
 
             }
 
-            SpawnPlayer();
+            SpawnCharacter();
             UIController.I.resetCheckPointCell();
             UIController.I.switchAllButtons(true);
 
@@ -133,12 +135,12 @@ public class LevelManager : MonoBehaviour {
         Debug.Log("levelCompleted");
     }
 
-    public void SpawnPlayer()
+    public void SpawnCharacter()
     {
         characterController.actualCell = initialCell;
         characterController.SetPlayerInitialTransition();
         characterController.transform.rotation = Quaternion.Euler(initRotation);
-        characterController.transform.position = new Vector3(initialCell.cellPosX, initialCell.cellPosY, GameManager.I.zPlayerDisplacement);
+        characterController.transform.position = new Vector3(initialCell.cellPosX, initialCell.cellPosY, GameManager.I.zCharacterDisplacement);
     }
 
     public void RestartLevelManager()
@@ -146,7 +148,7 @@ public class LevelManager : MonoBehaviour {
         commandsToExecute = new List<COMMAND>();
         buttonsCommandsToExecute = new List<Button>();
         previousCellChecked = null;
-        SpawnPlayer();
+        SpawnCharacter();
     }
 
     private void checkPoint()
@@ -258,7 +260,7 @@ public class LevelManager : MonoBehaviour {
     {
         if(characterController.initialPosition != characterController.transform.position)
         {
-            SpawnPlayer();
+            SpawnCharacter();
            
         }
     }

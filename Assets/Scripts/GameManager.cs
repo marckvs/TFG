@@ -20,10 +20,10 @@ public class GameManager : Singleton<GameManager>
     public bool levelCompleted = false;
     public bool runningProgram = false;
 
-    public GameObject player;
+    public GameObject character;
 
     public float stepDuration;
-    public float zPlayerDisplacement;
+    public float zCharacterDisplacement;
 
     public int numPassedLevels;
     public int numLevels = 11;
@@ -73,6 +73,5 @@ public class GameManager : Singleton<GameManager>
         StopAllCoroutines();
         currentLevel.RestartLevelManager();
         InitCoroutines();
-
     }
 }

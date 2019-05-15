@@ -99,7 +99,7 @@ public class UIController : Singleton<UIController> {
 
     public Button[] levels;
     [HideInInspector]
-    public PlayerController playerController;
+    public CharacterController characterController;
 
     public bool isDeleteActivated = false;
     public bool isFunctionLevel;

@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 
 [System.Serializable]
-public class PlayerController : MonoBehaviour {
+public class CharacterController : MonoBehaviour {
     [HideInInspector]
 
     public Vector3 initialPosition;
@@ -44,13 +44,13 @@ public class PlayerController : MonoBehaviour {
             if (c == COMMAND.jump)
             {
                 animator.SetBool("is_in_air", true);
-                tr.DOJump(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zPlayerDisplacement), .6f, 1, GameManager.I.stepDuration).SetEase(Ease.InSine);
+                tr.DOJump(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zCharacterDisplacement), .6f, 1, GameManager.I.stepDuration).SetEase(Ease.InSine);
 
             }
             else
             {
                 animator.SetBool("run", true);
-                tr.DOMove(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zPlayerDisplacement), GameManager.I.stepDuration);
+                tr.DOMove(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zCharacterDisplacement), GameManager.I.stepDuration);
 
             }
         }
