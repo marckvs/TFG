@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(GameManager), typeof(SceneLoader), typeof(UIController))]
+[RequireComponent(typeof(GameManager), typeof(UIController))]
 [DisallowMultipleComponent]
 public class Loader : Singleton<Loader>
 {
@@ -13,7 +14,6 @@ public class Loader : Singleton<Loader>
 
     private void Start()
     {
-        SceneLoader.I.LoadScene(SceneLoader.SCENES.Menu);
+        SceneManager.LoadScene(1);
     }
-
 }
