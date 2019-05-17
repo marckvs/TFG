@@ -2910,7 +2910,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -125}
+  m_AnchoredPosition: {x: 0, y: -125.00012}
   m_SizeDelta: {x: 0, y: -250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &242938311
@@ -8145,7 +8145,7 @@ MonoBehaviour:
   - {fileID: 1018434278}
   - {fileID: 1401344980}
   - {fileID: 316916877}
-  playerController: {fileID: 0}
+  characterController: {fileID: 0}
   isDeleteActivated: 0
   isFunctionLevel: 0
   isLoopLevel: 0
@@ -8176,9 +8176,9 @@ MonoBehaviour:
   currentLevel: {fileID: 0}
   levelCompleted: 0
   runningProgram: 0
-  player: {fileID: 1428137496097866, guid: 4db22841f70e92c4c8017ce2e10a0b30, type: 2}
+  character: {fileID: 1428137496097866, guid: 4db22841f70e92c4c8017ce2e10a0b30, type: 2}
   stepDuration: 0.6
-  zPlayerDisplacement: -0.25
+  zCharacterDisplacement: 0
   numPassedLevels: 0
   numLevels: 11
 --- !u!4 &854748591

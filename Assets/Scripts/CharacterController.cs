@@ -44,7 +44,8 @@ public class CharacterController : MonoBehaviour {
             if (c == COMMAND.jump)
             {
                 animator.SetBool("is_in_air", true);
-                tr.DOJump(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zCharacterDisplacement), .6f, 1, GameManager.I.stepDuration).SetEase(Ease.InSine);
+                tr.DOJump(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zCharacterDisplacement), .6f, 1, 
+                    GameManager.I.stepDuration).SetEase(Ease.InSine);
 
             }
             else

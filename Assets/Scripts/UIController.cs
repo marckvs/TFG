@@ -544,8 +544,6 @@ public class UIController : Singleton<UIController> {
         }
     }
 
-
-
     //OnProgramButtonHold ; se usa para todos los tipos de programa
     public void OnMainProgramButtonHold(Button button)
     {
@@ -734,8 +732,6 @@ public class UIController : Singleton<UIController> {
         
     }
 
-   
-
     private void resetDeleteButtons()
     {
 
@@ -872,8 +868,7 @@ public class UIController : Singleton<UIController> {
                     levels[i].transform.GetChild(j).gameObject.SetActive(false);
                 }
             }
-        }
-        
+        }     
     }
 
     private void Save()
@@ -894,6 +889,4 @@ public class UIController : Singleton<UIController> {
             file.Close();
         }
     }
-
-
 }
