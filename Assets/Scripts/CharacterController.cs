@@ -22,12 +22,12 @@ public class CharacterController : MonoBehaviour {
         initialPosition = tr.position;
     }
 
-    public void Move(COMMAND c)
+    public void Move(COMMAND c) //Action of the character that moves forward
     {
         if (actualTransition.transition == TRANSITION.none)
         {
             Debug.LogError("you missed move");
-            isLevelFailed = true;
+            isLevelFailed = true; //Boolean used in order to trigger the CheckLevelFailed() coroutine
         }
         else if ((actualTransition.transition == TRANSITION.jump && c == COMMAND.walk) ||
             (actualTransition.transition == TRANSITION.walk && c == COMMAND.jump))
@@ -46,12 +46,14 @@ public class CharacterController : MonoBehaviour {
                 animator.SetBool("is_in_air", true);
                 tr.DOJump(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zCharacterDisplacement), .6f, 1, 
                     GameManager.I.stepDuration).SetEase(Ease.InSine);
+                //DOJump: method of the DOTween package which the character uses to jump with the easing curve InSine
 
             }
             else
             {
                 animator.SetBool("run", true);
                 tr.DOMove(new Vector3(actualCell.cellPosX, actualCell.cellPosY, GameManager.I.zCharacterDisplacement), GameManager.I.stepDuration);
+                //DOMove: method of the DOTween package which the character uses to move
 
             }
         }

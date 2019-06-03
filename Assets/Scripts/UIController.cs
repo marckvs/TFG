@@ -137,8 +137,9 @@ public class UIController : Singleton<UIController> {
 
     private void Start()
     {
+        GameManager.I.numPassedLevels = GameManager.I.numLevels;
         GameManager.I.numPassedLevels = 1;
-        Load();
+        //Load();
         Debug.Log("numpassed" + GameManager.I.numPassedLevels);
         disableUnpassedLevels();
     }

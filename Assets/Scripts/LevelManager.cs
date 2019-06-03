@@ -194,9 +194,9 @@ public class LevelManager : MonoBehaviour {
 
     private void buildSequenceOfcommands()
     {
-        programCommands = UIController.I.programSpots;
+        programCommands = UIController.I.programSpots; //Get the commands from the UI
 
-        if(UIController.I.isFunctionLevel)
+        if(UIController.I.isFunctionLevel) //Select the commands of the subprogram depending of the section
             subProgramCommands = UIController.I.functionSpots;
         if(UIController.I.isLoopLevel)
             subProgramCommands = UIController.I.loopSpots;
@@ -206,7 +206,7 @@ public class LevelManager : MonoBehaviour {
 
         for (int i = 0; i < programCommands.Length; i++)
         {
-            COMMAND commandPr = programCommands[i].GetComponent<Command>().command;
+            COMMAND commandPr = programCommands[i].GetComponent<Command>().command; //Get the command component of the object
             Button buttonPr = programCommands[i].GetComponent<Button>();
              
             if (commandPr != COMMAND.function)
@@ -217,7 +217,7 @@ public class LevelManager : MonoBehaviour {
                     buttonsCommandsToExecute.Add(buttonPr);
                 }              
             }
-            else if (commandPr == COMMAND.function)
+            else if (commandPr == COMMAND.function) //If the command is function or loop, add the commands to the queue
             {
                 for (int j = 0; j < subProgramCommands.Length; j++)
                 {
@@ -234,8 +234,10 @@ public class LevelManager : MonoBehaviour {
         }
     }
 
-    private void commandToAction(COMMAND command)
-    {
+    private void commandToAction(COMMAND command) 
+    { 
+        //Once the secuence of commands is formed, each command will 
+        //trigger the respective action in the character
         switch (command)
         {
             case COMMAND.walk:

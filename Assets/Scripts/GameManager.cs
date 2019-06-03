@@ -30,11 +30,11 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator CheckNotRunningProgram()
     {
-        yield return new WaitForSeconds(stepDuration);
-        currentLevel.waitStepDuration();
+        yield return new WaitForSeconds(stepDuration); //When the game is restarted, waits until the last
+        currentLevel.waitStepDuration();               //step of the character to avoid DOTween bugs.
 
         runningProgram = false;
-        while (!runningProgram)
+        while (!runningProgram)//The RunProgram corotuine will not be started until runProgram is true.
         {
             yield return null;
         }
@@ -48,7 +48,7 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
         yield return new WaitForSeconds(1f);
-        currentLevel.LevelCompleted();
+        currentLevel.LevelCompleted(); //Wait 1 second to show the screen to go to the next level
     }
 
     public void InitCoroutines()
@@ -66,11 +66,11 @@ public class GameManager : Singleton<GameManager>
         currentLevel.functionSpotsUsed = 0;
         currentLevel.loopSpotsUsed = 0;
 
-        UIController.I.ProgramController();
-        UIController.I.RestartUI();
+        UIController.I.ProgramController(); //Manages the UI of the game depending on the section
+        UIController.I.RestartUI(); 
 
-        currentLevel.StopAllCoroutines();
-        StopAllCoroutines();
+        currentLevel.StopAllCoroutines(); //Stops the RunProgram coroutine of the levelManager
+        StopAllCoroutines(); //Stops the gameManager coroutines
         currentLevel.RestartLevelManager();
         InitCoroutines();
     }
