@@ -9,7 +9,7 @@ public enum LEVELCLASS
 
 public enum LEVEL
 {
-    level1 = 2, level2 = 3, level3 = 4, level4 = 5, level5 = 6, level6 = 7, level7 = 8, level8 = 9, level9 = 10, level2_1 = 11, level4_1 = 12
+    level1 = 2, level2 = 3, level3 = 4, level4 = 5, level5 = 6, level6 = 7, level7 = 8, level8 = 9, level9 = 10, level10 = 11, level11 = 12
 }
 
 [DisallowMultipleComponent]

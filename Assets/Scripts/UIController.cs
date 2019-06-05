@@ -138,12 +138,13 @@ public class UIController : Singleton<UIController> {
     private void Start()
     {
         GameManager.I.numPassedLevels = GameManager.I.numLevels;
-        GameManager.I.numPassedLevels = 1;
+        //GameManager.I.numPassedLevels = 1;
         //Load();
         Debug.Log("numpassed" + GameManager.I.numPassedLevels);
         disableUnpassedLevels();
     }
-    #region MainMenuUI
+
+   #region MainMenuUI
 
     public void OnNextLevelsMenuButtonPressed(bool next)
     {
@@ -620,11 +621,12 @@ public class UIController : Singleton<UIController> {
             controlVisibilityCommands(0, true);
             controlVisibilityCommands(4, false);
         }
-        else if(levelManager.level == LEVEL.level3)
+        else if(levelManager.level == LEVEL.level3 || (levelManager.level == LEVEL.level4))
         {
             controlVisibilityCommands(0, true);
             controlVisibilityCommands(5, false);
         }
+
         else
         {
             controlVisibilityCommands(0, true);
