@@ -237,7 +237,7 @@ public class LevelManager : MonoBehaviour {
     private void commandToAction(COMMAND command) 
     { 
         //Once the secuence of commands is formed, each command will 
-        //trigger the respective action in the character
+        //trigger the respective action in the character    
         switch (command)
         {
             case COMMAND.walk:

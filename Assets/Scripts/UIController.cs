@@ -399,20 +399,24 @@ public class UIController : Singleton<UIController> {
             LevelMenuScreen.SetActive(true);
             return;
         }
-
-        levels[GameManager.I.numPassedLevels].interactable = true;
-
-        for (int i = 0; i < levels[GameManager.I.numPassedLevels].transform.childCount; i++)
+        else if(GameManager.I.numPassedLevels < GameManager.I.numLevels)
         {
-            if(levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.activeSelf == false)
+            levels[GameManager.I.numPassedLevels].interactable = true;
+
+            for (int i = 0; i < levels[GameManager.I.numPassedLevels].transform.childCount; i++)
             {
-                levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.SetActive(true);
-            }
-            else
-            {
-                levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.SetActive(false);
+                if (levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.activeSelf == false)
+                {
+                    levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.SetActive(true);
+                }
+                else
+                {
+                    levels[GameManager.I.numPassedLevels].transform.GetChild(i).gameObject.SetActive(false);
+                }
             }
         }
+
+        
         Debug.Log((int)GameManager.I.currentLevel.level + ", " + GameManager.I.numPassedLevels);
         if ((int)GameManager.I.currentLevel.level > GameManager.I.numPassedLevels+1)
         {
